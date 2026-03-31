@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hema Nexus – 血液内科 知識資産ベース</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:ital,wght@0,400;0,500&display=swap');
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#2d333b;
+  --border:#30363d;--border2:#444c56;
+  --text:#e6edf3;--text2:#8b949e;--text3:#484f58;
+  --blue:#1f8be8;--blue2:#0d5fa3;--blue-bg:rgba(31,139,232,.1);
+  --teal:#1dab7a;--teal2:#0f6e56;--teal-bg:rgba(29,171,122,.1);
+  --amber:#d29922;--amber-bg:rgba(210,153,34,.1);
+  --red:#da3633;--red-bg:rgba(218,54,51,.1);
+  --purple:#8957e5;--purple-bg:rgba(137,87,229,.1);
+  --r:8px;--rl:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* ── LOGIN ── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at 60% 40%,#0d2540 0%,#0d1117 60%);}
+.lcard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:360px;}
+.llogo{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+.llogo-mark{width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#fff;letter-spacing:-1px;}
+.llogo-name{font-size:15px;font-weight:700;line-height:1.2;}
+.llogo-sub{font-size:11px;color:var(--text2);font-weight:300;}
+.lcard h2{font-size:20px;font-weight:700;margin-bottom:6px;}
+.lcard p{color:var(--text2);font-size:13px;margin-bottom:28px;}
+.fgroup{margin-bottom:16px;}
+.fgroup label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:.04em;}
+.fgroup input,.fgroup select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:10px 12px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s;}
+.fgroup input:focus,.fgroup select:focus{border-color:var(--blue);}
+.err-msg{background:rgba(218,54,51,.12);border:1px solid rgba(218,54,51,.3);border-radius:var(--r);color:#f85149;padding:10px 12px;font-size:13px;margin-bottom:14px;display:none;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--r);border:none;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;transition:all .15s;}
+.btn-primary{background:var(--blue);color:#fff;width:100%;padding:12px;}
+.btn-primary:hover{background:#2196f3;}
+.btn-primary:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed;}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--bg3);color:var(--text);}
+.btn-teal{background:var(--teal);color:#fff;}
+.btn-teal:hover{background:#25c78d;}
+.btn-amber{background:var(--amber);color:#fff;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-xs{padding:4px 8px;font-size:11px;}
+
+/* ── TOPBAR ── */
+#app{display:none;min-height:100vh;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;}
+.topbar-mark{width:26px;height:26px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:#fff;}
+.nav-tabs{display:flex;gap:2px;background:var(--bg3);border-radius:var(--r);padding:3px;}
+.ntab{padding:5px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;border:none;background:transparent;font-family:inherit;}
+.ntab.active{background:var(--bg2);color:var(--text);}
+.ntab:hover:not(.active){color:var(--text);}
+.badge-count{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:700;margin-left:4px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--blue2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.user-info{font-size:13px;color:var(--text2);}
+
+/* ── LAYOUT ── */
+.main-layout{display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 52px);}
+.left-panel{padding:24px;border-right:1px solid var(--border);overflow-y:auto;}
+.right-panel{padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ── SECTION ── */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;transition:border-color .15s;}
+.card:hover{border-color:var(--border2);}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.card-title{font-size:14px;font-weight:700;line-height:1.4;}
+.card-meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);flex-wrap:wrap;}
+.card-body{font-size:13px;color:var(--text2);line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+
+/* ── STATUS TAGS ── */
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;letter-spacing:.03em;white-space:nowrap;}
+.tag-q{background:var(--amber-bg);color:var(--amber);}
+.tag-answered{background:var(--teal-bg);color:var(--teal);}
+.tag-memo{background:var(--blue-bg);color:var(--blue);}
+.tag-disease{background:var(--teal-bg);color:#2dcc96;}
+.tag-infection{background:var(--amber-bg);color:#e6b744;}
+.tag-flow{background:var(--blue-bg);color:#58acf5;}
+.tag-procedure{background:var(--purple-bg);color:#b08bf5;}
+.tag-other{background:rgba(139,148,158,.12);color:var(--text2);}
+
+/* ── QUESTION CARD ── */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;transition:all .15s;}
+.q-card:hover{border-color:var(--border2);}
+.q-card.unanswered{border-left:3px solid var(--amber);}
+.q-card.answered{border-left:3px solid var(--teal);}
+.q-card-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.q-card-body{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:10px;}
+.q-answer-preview{background:var(--bg3);border-radius:var(--r);padding:10px 12px;font-size:12px;color:var(--text2);border-left:2px solid var(--teal);margin-top:8px;}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.fchip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-family:inherit;cursor:pointer;transition:all .15s;}
+.fchip.active,.fchip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+
+/* ── POST FORM ── */
+.post-form{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.ffield{margin-bottom:12px;}
+.ffield label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px;letter-spacing:.04em;}
+.ffield input,.ffield select,.ffield textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:9px 12px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s;resize:vertical;}
+.ffield input:focus,.ffield select:focus,.ffield textarea:focus{border-color:var(--blue);}
+.ffield textarea{min-height:90px;}
+.post-type-switch{display:flex;gap:8px;margin-bottom:16px;}
+.ptype-btn{flex:1;padding:8px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s;text-align:center;}
+.ptype-btn.active{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);}
+
+/* ── PUBMED SEARCH PANEL ── */
+.pubmed-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.pubmed-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--bg3);}
+.pubmed-head span{font-size:13px;font-weight:700;}
+.pubmed-query-row{padding:12px;display:flex;gap:8px;}
+.pubmed-query-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:8px 12px;font-size:13px;font-family:inherit;outline:none;}
+.pubmed-query-row input:focus{border-color:var(--blue);}
+.pubmed-results{padding:0 12px 12px;}
+.paper-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.paper-card:hover,.paper-card.selected{border-color:var(--blue);background:var(--blue-bg);}
+.paper-card.selected .paper-title{color:var(--blue);}
+.paper-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:4px;color:var(--text);}
+.paper-meta{font-size:11px;color:var(--text2);}
+.paper-abstract{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* ── AI CHAT ── */
+.ai-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;display:flex;flex-direction:column;min-height:400px;max-height:calc(100vh - 200px);}
+.ai-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--bg3);}
+.ai-indicator{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}
+.msg{display:flex;gap:8px;}
+.msg.user{flex-direction:row-reverse;}
+.msg-av{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.msg.ai .msg-av{background:rgba(29,171,122,.2);color:var(--teal);}
+.msg.user .msg-av{background:var(--blue2);color:#fff;}
+.msg-bub{padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.6;max-width:calc(100% - 36px);white-space:pre-wrap;word-break:break-word;}
+.msg.ai .msg-bub{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:3px;}
+.msg.user .msg-bub{background:var(--blue2);color:#fff;border-bottom-right-radius:3px;}
+.typing-bub{display:flex;align-items:center;gap:4px;padding:12px 14px;}
+.tdot{width:6px;height:6px;border-radius:50%;background:var(--text2);animation:tbounce 1.2s ease-in-out infinite;}
+.tdot:nth-child(2){animation-delay:.15s}.tdot:nth-child(3){animation-delay:.3s}
+@keyframes tbounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
+.ai-input-row{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;}
+.ai-inp{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:8px 12px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;resize:none;max-height:80px;}
+.ai-inp:focus{border-color:var(--blue);}
+.ai-send{background:var(--blue);border:none;border-radius:var(--r);color:#fff;padding:8px 12px;cursor:pointer;font-size:15px;transition:background .15s;align-self:flex-end;}
+.ai-send:hover{background:#2196f3;}
+.ai-send:disabled{background:var(--bg4);color:var(--text3);cursor:not-allowed;}
+.quick-btns{padding:0 10px 8px;display:flex;gap:5px;flex-wrap:wrap;}
+.qbtn{background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--text2);padding:3px 9px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;}
+.qbtn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;}
+.stat-num{font-size:22px;font-weight:700;font-family:'DM Mono',monospace;color:var(--blue);margin-bottom:2px;}
+.stat-lbl{font-size:10px;color:var(--text3);font-weight:500;letter-spacing:.04em;}
+
+/* ── INFOGRAPHIC (inline preview) ── */
+.ig-preview{background:#F3F4F6;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin-top:10px;}
+.ig-preview-head{background:#374151;padding:10px 14px;}
+.ig-preview-title{color:#fff;font-size:13px;font-weight:700;line-height:1.3;}
+.ig-preview-sub{color:rgba(255,255,255,.5);font-size:10px;margin-top:3px;}
+.ig-preview-cols{display:grid;grid-template-columns:28% 44% 28%;min-height:280px;}
+.ig-col-head{padding:6px 10px;font-size:9px;font-weight:800;letter-spacing:.08em;color:#fff;}
+.ig-left{background:#F9FAFB;border-right:1px solid #E5E7EB;}
+.ig-left .ig-col-head{background:#4B5563;}
+.ig-center{background:#fff;}
+.ig-center .ig-col-head{background:#1E3A6E;}
+.ig-right{background:#F3F4F6;}
+.ig-right .ig-col-head{background:#374151;}
+.ig-setting-list{padding:8px 10px;display:flex;flex-direction:column;gap:6px;}
+.ig-si{display:flex;gap:6px;align-items:flex-start;}
+.ig-si-icon{font-size:13px;flex-shrink:0;width:18px;text-align:center;}
+.ig-si-lbl{font-size:8px;font-weight:700;color:#2563EB;letter-spacing:.05em;text-transform:uppercase;}
+.ig-si-val{font-size:10px;color:#374151;line-height:1.4;}
+.ig-center-body{padding:10px;}
+.ig-headline{font-size:12px;font-weight:800;color:#111827;margin-bottom:8px;line-height:1.3;}
+.ig-chart-wrap{height:100px;margin-bottom:8px;}
+.ig-num-box{background:#EFF6FF;border-left:3px solid #2563EB;border-radius:6px;padding:7px 9px;margin-bottom:6px;}
+.ig-num{font-size:18px;font-weight:800;color:#2563EB;line-height:1;}
+.ig-num-desc{font-size:9px;color:#4B5563;margin-top:3px;line-height:1.3;}
+.ig-bar-wrap{height:70px;}
+.ig-right-body{padding:8px 10px;display:flex;flex-direction:column;gap:8px;}
+.ig-rb-head{font-size:9px;font-weight:800;color:#374151;letter-spacing:.06em;border-left:2px solid #2563EB;padding-left:6px;margin-bottom:4px;}
+.ig-rb-text{font-size:10px;color:#374151;line-height:1.5;}
+.ig-rb.conclusion .ig-rb-head{border-color:#059669;}
+.ig-rb.conclusion .ig-rb-text{font-weight:600;color:#065F46;}
+.ig-divider{height:1px;background:#E5E7EB;}
+.ig-actions{padding:10px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:var(--bg3);}
+
+/* ── PDF DROP ── */
+.drop-area{border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3);position:relative;}
+.drop-area:hover,.drop-area.dragover{border-color:var(--blue);background:var(--blue-bg);}
+.drop-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pdf-loaded-bar{background:var(--blue-bg);border:1px solid rgba(31,139,232,.3);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:8px;}
+.pdf-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0 2px;}
+.pdf-rm:hover{color:var(--red);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--bg3);border:1px solid var(--teal);border-radius:var(--r);padding:10px 16px;font-size:13px;color:var(--teal);transform:translateY(60px);opacity:0;transition:all .25s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── PROGRESS ── */
+.prog-wrap{margin-top:12px;display:none;}
+.prog-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--blue);border-radius:2px;width:0;transition:width .4s;}
+.prog-lbl{font-size:11px;color:var(--text2);margin-top:6px;text-align:center;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 0;color:var(--text3);}
+.empty .icon{font-size:28px;margin-bottom:10px;}
+
+/* ── MODAL OVERLAY ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:90%;max-width:900px;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:15px;font-weight:700;}
+.modal-close{background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:0 4px;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:20px;}
+
+@media print{.topbar,.ai-panel,.pubmed-panel,.stats-row{display:none!important}.ig-actions{display:none!important}}
+
+/* ── VOICE INSIGHT ── */
+.voice-screen{background:var(--bg);min-height:calc(100vh - 52px);display:none;}
+.voice-screen.active{display:block;}
+.voice-hero{background:radial-gradient(ellipse at 50% 30%,#1a1f35 0%,var(--bg) 70%);padding:32px 24px 24px;text-align:center;border-bottom:1px solid var(--border);}
+.voice-hero h2{font-size:20px;font-weight:700;margin-bottom:6px;}
+.voice-hero p{color:var(--text2);font-size:13px;}
+.mic-btn{width:88px;height:88px;border-radius:50%;border:3px solid var(--purple);background:var(--purple-bg);display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;margin:20px auto 12px;transition:all .2s;position:relative;}
+.mic-btn:hover{background:rgba(137,87,229,.2);}
+.mic-btn.recording{background:rgba(218,54,51,.15);border-color:var(--red);animation:micpulse 1.2s ease-in-out infinite;}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(218,54,51,.4)}50%{box-shadow:0 0 0 16px rgba(218,54,51,0)}}
+.mic-status{font-size:12px;color:var(--text2);margin-bottom:4px;}
+.voice-transcript{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;min-height:70px;font-size:14px;color:var(--text);line-height:1.6;margin:12px 0;white-space:pre-wrap;}
+.voice-transcript.empty{color:var(--text3);font-style:italic;}
+.insight-form{padding:20px 24px;}
+.insight-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.itag{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-family:inherit;cursor:pointer;transition:all .15s;}
+.itag.active{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
+.insight-list{padding:0 24px 24px;}
+.insight-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--purple);}
+.insight-card.idea{border-left-color:var(--amber);}
+.insight-card.data{border-left-color:var(--teal);}
+.insight-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.insight-card-title{font-size:13px;font-weight:700;line-height:1.4;}
+.insight-card-body{font-size:12px;color:var(--text2);line-height:1.65;white-space:pre-wrap;}
+.insight-card-meta{font-size:11px;color:var(--text3);margin-top:6px;}
+.itag-display{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;}
+.itag-clinical{background:var(--purple-bg);color:var(--purple);}
+.itag-idea{background:var(--amber-bg);color:var(--amber);}
+.itag-data{background:var(--teal-bg);color:var(--teal);}
+.ai-insight-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-top:10px;font-size:12px;color:var(--text2);line-height:1.65;border-left:2px solid var(--blue);}
+.presentation-seed{background:linear-gradient(135deg,rgba(137,87,229,.12) 0%,rgba(31,139,232,.08) 100%);border:1px solid rgba(137,87,229,.3);border-radius:var(--rl);padding:16px;margin-bottom:10px;}
+.presentation-seed-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.presentation-seed-body{font-size:12px;color:var(--text2);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN ════ -->
+<div id="login-screen">
+  <div class="lcard">
+    <div class="llogo">
+      <div class="llogo-mark">Hx</div>
+      <div><div class="llogo-name">Hema Nexus</div><div class="llogo-sub">血液内科 知識資産ベース</div></div>
+    </div>
+    <h2>ログイン</h2>
+    <p>科内メンバー専用システムです</p>
+    <div id="lerr" class="err-msg">ユーザー名またはパスワードが違います</div>
+    <div class="fgroup"><label>ユーザー名</label><input type="text" id="lu" placeholder="例: sakai" autocomplete="off"></div>
+    <div class="fgroup"><label>パスワード</label><input type="password" id="lp" placeholder="••••••••"></div>
+    <button class="btn btn-primary" onclick="doLogin()">ログイン</button>
+    <p style="margin-top:14px;font-size:11px;color:var(--text3);text-align:center;">初回: パスワード = hema2025</p>
+  </div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="topbar-logo"><div class="topbar-mark">Hx</div>Hema Nexus</div>
+      <div class="nav-tabs">
+        <button class="ntab active" onclick="switchView('feed')">メモ一覧</button>
+        <button class="ntab" onclick="switchView('questions')" id="tab-q">疑問 <span class="badge-count" id="q-badge" style="display:none">0</span></button>
+        <button class="ntab" onclick="switchView('post')">投稿</button>
+        <button class="ntab" onclick="switchView('voice')" style="color:var(--purple);">🎤 Voice</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="user-info" id="uname-display"></div>
+      <div class="avatar" id="uavatar"></div>
+      <button class="btn btn-ghost btn-sm" onclick="showSyncModal()" title="GASへデータ同期">📤 週次同期</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">ログアウト</button>
+      <button class="btn btn-sm" style="background:rgba(137,87,229,.15);color:var(--purple);border:1px solid rgba(137,87,229,.3);" onclick="openNotionSettings()" title="Notion連携設定">🔗 Notion設定</button>
+      <button class="btn btn-sm" style="background:var(--amber-bg);color:var(--amber);border:1px solid rgba(210,153,34,.3);" onclick="exportForGAS()" title="週次レポート用にデータをエクスポート">📤 週次エクスポート</button>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel">
+
+      <!-- FEED VIEW -->
+      <div class="view active" id="view-feed">
+        <div class="sec-head">
+          <div class="sec-title"><span class="dot" style="background:var(--blue)"></span>蓄積メモ</div>
+          <span id="feed-count" style="font-size:12px;color:var(--text3)"></span>
+        </div>
+        <div class="filters">
+          <button class="fchip active" onclick="filterFeed('all',this)">すべて</button>
+          <button class="fchip" onclick="filterFeed('disease',this)">疾患</button>
+          <button class="fchip" onclick="filterFeed('flow',this)">鑑別フロー</button>
+          <button class="fchip" onclick="filterFeed('infection',this)">感染症</button>
+          <button class="fchip" onclick="filterFeed('procedure',this)">手技</button>
+          <button class="fchip" onclick="filterFeed('answered',this)">回答済み疑問</button>
+        </div>
+        <div id="feed-list"></div>
+      </div>
+
+      <!-- QUESTIONS VIEW -->
+      <div class="view" id="view-questions">
+        <div class="sec-head">
+          <div class="sec-title"><span class="dot" style="background:var(--amber)"></span>未回答の疑問</div>
+          <button class="btn btn-ghost btn-sm" onclick="switchView('post');setPostType('question')">+ 疑問を投稿</button>
+        </div>
+        <div id="q-list"></div>
+      </div>
+
+      <!-- POST VIEW -->
+      <div class="view" id="view-post">
+        <div class="sec-title" style="margin-bottom:16px;"><span class="dot" style="background:var(--teal)"></span>新規投稿</div>
+        <div class="post-type-switch">
+          <button class="ptype-btn active" id="ptype-memo" onclick="setPostType('memo')">📝 診療メモ</button>
+          <button class="ptype-btn" id="ptype-question" onclick="setPostType('question')">❓ 疑問・相談</button>
+        </div>
+        <div class="post-form">
+          <div class="form-row">
+            <div class="ffield"><label>タイトル *</label><input type="text" id="p-title" placeholder="例: DLBCL 初療チェック"></div>
+            <div class="ffield" id="cat-field"><label>カテゴリ</label>
+              <select id="p-cat">
+                <option value="disease">疾患プロトコル</option>
+                <option value="flow">鑑別フロー</option>
+                <option value="infection">感染症対応</option>
+                <option value="procedure">手技・基準</option>
+                <option value="other">その他</option>
+              </select>
+            </div>
+          </div>
+          <div class="ffield"><label id="body-label">内容（自由記載）</label>
+            <textarea id="p-body" placeholder="診療メモ、気づき、疑問など自由に記載"></textarea>
+          </div>
+          <div class="ffield"><label>コメント・補足</label><input type="text" id="p-comment" placeholder="例: 要追確認、ASH2024参照"></div>
+          <div id="perr" class="err-msg">タイトルと内容を入力してください</div>
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+            <button class="btn btn-ghost" onclick="clearPost()">クリア</button>
+            <button class="btn btn-teal" onclick="submitPost()">投稿する</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /left-panel -->
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">総投稿数</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-q" style="color:var(--amber)">0</div><div class="stat-lbl">未回答疑問</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-ig" style="color:var(--teal)">0</div><div class="stat-lbl">インフォグラフィック</div></div>
+      </div>
+
+      <!-- PubMed search panel -->
+      <div class="pubmed-panel">
+        <div class="pubmed-head">
+          <span style="font-size:16px">🔍</span>
+          <span>PubMed 文献検索</span>
+          <span style="margin-left:auto;font-size:10px;color:var(--text3)">→ 選択してインフォグラフィック生成</span>
+        </div>
+        <div class="pubmed-query-row">
+          <input type="text" id="pm-query" placeholder="例: rituximab pre-treatment DLBCL" onkeydown="if(event.key==='Enter')searchPubmed()">
+          <button class="btn btn-ghost btn-sm" onclick="searchPubmed()" id="pm-btn">検索</button>
+        </div>
+        <div class="pubmed-results" id="pm-results">
+          <div style="font-size:12px;color:var(--text3);padding:4px 0;">疑問の疾患・治療名を英語で入力して検索</div>
+        </div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;flex-wrap:wrap;" id="pm-actions" style="display:none">
+        </div>
+      </div>
+
+      <!-- AI Chat -->
+      <div class="ai-panel">
+        <div class="ai-head">
+          <div class="ai-indicator"></div>
+          <span style="font-size:13px;font-weight:700;">AI アシスタント</span>
+          <span style="margin-left:auto;font-size:10px;color:var(--text3);">Claude Sonnet</span>
+        </div>
+        <div class="ai-messages" id="ai-msgs">
+          <div class="msg ai">
+            <div class="msg-av">AI</div>
+            <div class="msg-bub">こんにちは。蓄積メモの検索・要約、PubMed検索クエリの提案、論文内容の解説など何でも聞いてください。</div>
+          </div>
+        </div>
+        <div class="quick-btns">
+          <button class="qbtn" onclick="quickAsk('未回答の疑問を整理してまとめて')">未回答疑問を整理</button>
+          <button class="qbtn" onclick="quickAsk('感染症関連のメモをまとめて')">感染症メモ</button>
+          <button class="qbtn" onclick="quickAsk('今週追加されたメモを要約して')">今週のメモ</button>
+        </div>
+        <div class="ai-input-row">
+          <textarea class="ai-inp" id="ai-inp" placeholder="質問・指示を入力..." rows="1" onkeydown="handleAiKey(event)" oninput="autoR(this)"></textarea>
+          <button class="ai-send" id="ai-send" onclick="sendAI()">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ VOICE INSIGHT SCREEN ════ -->
+<div class="voice-screen" id="voice-screen">
+  <div style="display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 52px);">
+    <!-- Left: recording + form -->
+    <div style="border-right:1px solid var(--border);overflow-y:auto;">
+      <div class="voice-hero">
+        <h2>🎤 Voice Insight</h2>
+        <p>机上回診の気づきを音声でメモ。学会発表ネタに育てます。</p>
+        <div class="mic-btn" id="mic-btn" onclick="toggleRecording()">🎙️</div>
+        <div class="mic-status" id="mic-status">タップして録音開始</div>
+        <div id="voice-transcript" class="voice-transcript empty">録音すると、ここにテキストが表示されます...</div>
+      </div>
+      <div class="insight-form">
+        <div class="ffield">
+          <label>タイトル（空欄でAIが自動生成）</label>
+          <input type="text" id="vi-title" placeholder="例: リツキシマブ前治療 自科での検討可能性">
+        </div>
+        <div class="ffield">
+          <label>メモ種別</label>
+          <div class="insight-tags">
+            <button class="itag active" data-tag="clinical" onclick="selectItag(this)">💡 臨床的気づき</button>
+            <button class="itag" data-tag="idea" onclick="selectItag(this)">🏆 発表アイデア</button>
+            <button class="itag" data-tag="data" onclick="selectItag(this)">📊 自科データ照合</button>
+          </div>
+        </div>
+        <div class="ffield">
+          <label>関連する疑問・テーマ（任意）</label>
+          <select id="vi-link-q"><option value="">紐付けなし</option></select>
+        </div>
+        <div class="ffield">
+          <label>メモ本文（音声認識後に編集可）</label>
+          <textarea id="vi-body" style="min-height:110px;" placeholder="音声認識結果が自動で入ります。ここで編集・追記も可能です。"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button class="btn btn-ghost" onclick="clearVoice()">クリア</button>
+          <button class="btn" style="background:var(--purple);color:#fff;" onclick="saveInsight()">✨ AIで整理して保存</button>
+        </div>
+        <div id="vi-prog" style="display:none;margin-top:10px;">
+          <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;"><div id="vi-prog-fill" style="height:100%;background:var(--purple);width:0;transition:width .4s;"></div></div>
+          <div id="vi-prog-lbl" style="font-size:11px;color:var(--text2);margin-top:6px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Right: insight list + presentation seeds -->
+    <div style="overflow-y:auto;padding:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="sec-title"><span class="dot" style="background:var(--purple)"></span>蓄積インサイト</div>
+        <button class="btn btn-ghost btn-sm" onclick="generatePresentationSeeds()">🏆 発表候補を整理</button>
+      </div>
+      <div class="filters">
+        <button class="fchip active" onclick="filterInsights('all',this)">すべて</button>
+        <button class="fchip" onclick="filterInsights('clinical',this)">臨床的気づき</button>
+        <button class="fchip" onclick="filterInsights('idea',this)">発表アイデア</button>
+        <button class="fchip" onclick="filterInsights('data',this)">自科データ照合</button>
+      </div>
+      <div id="insight-list"></div>
+      <div id="presentation-seeds" style="display:none;margin-top:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--purple);margin-bottom:10px;">🏆 学会発表候補テーマ</div>
+        <div id="seeds-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ INFOGRAPHIC MODAL ════ -->
+<div class="modal-bg" id="ig-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">📊 インフォグラフィック生成</div>
+      <button class="modal-close" onclick="closeIgModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: source selection -->
+      <div id="ig-step1">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">生成元を選択してください</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div class="paper-card" id="src-selected" onclick="setIgSource('selected')" style="display:none">
+            <div class="paper-title">✅ 選択中の論文を使う</div>
+            <div class="paper-meta" id="src-selected-meta">PubMedで選択した論文</div>
+          </div>
+          <div class="paper-card" onclick="setIgSource('pdf')">
+            <div class="paper-title">📎 PDF をアップロード</div>
+            <div class="paper-meta">論文PDFを直接投げる</div>
+          </div>
+          <div class="paper-card" onclick="setIgSource('text')">
+            <div class="paper-title">📝 テキストを貼り付け</div>
+            <div class="paper-meta">アブストラクト等</div>
+          </div>
+        </div>
+        <div id="ig-src-pdf" style="display:none">
+          <div class="drop-area" id="ig-drop">
+            <input type="file" accept=".pdf" onchange="handleIgPdf(this.files[0])">
+            <div>📑 PDFをドロップ or クリック</div>
+          </div>
+          <div id="ig-pdf-info" style="display:none"></div>
+        </div>
+        <div id="ig-src-text" style="display:none">
+          <textarea id="ig-text-inp" style="width:100%;height:160px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:10px;font-size:13px;font-family:inherit;outline:none;resize:vertical;" placeholder="アブストラクト・全文を貼り付け"></textarea>
+        </div>
+        <div id="ig-link-q" style="margin-top:14px;display:none">
+          <label style="font-size:12px;color:var(--text2);margin-bottom:6px;display:block;">📎 この疑問への回答として紐付ける</label>
+          <select id="ig-q-select" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);padding:8px 12px;font-size:13px;font-family:inherit;outline:none;">
+            <option value="">紐付けなし</option>
+          </select>
+        </div>
+        <div id="ig-gen-wrap" style="margin-top:16px;">
+          <div id="ig-prog-wrap" class="prog-wrap">
+            <div class="prog-bar"><div class="prog-fill" id="ig-prog-fill"></div></div>
+            <div class="prog-lbl" id="ig-prog-lbl"></div>
+          </div>
+          <button class="btn btn-primary" id="ig-gen-btn" onclick="runIgGeneration()" style="margin-top:10px;">✨ インフォグラフィックを生成</button>
+        </div>
+      </div>
+      <!-- Step 2: preview -->
+      <div id="ig-step2" style="display:none">
+        <div id="ig-inline-preview"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end;">
+          <button class="btn btn-ghost" onclick="backIgStep1()">← やり直す</button>
+          <button class="btn btn-teal" onclick="saveIgToBase()">✅ 知識ベースに保存</button>
+          <button class="btn btn-ghost" onclick="window.print()">🖨️ 印刷</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ GAS SYNC MODAL ════ -->
+<div class="modal-bg" id="sync-modal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-head">
+      <div class="modal-title">📤 Google Apps Script へデータ同期</div>
+      <button class="modal-close" onclick="closeSyncModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7;">
+        下のJSONをコピーして、Google Apps ScriptのスクリプトエディタでConsoleに<br>
+        <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:12px;">syncDataFromApp(JSON.stringify(...))</code> を実行するか、<br>
+        GAS側の「手動同期」シートに貼り付けてください。
+      </p>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;display:flex;justify-content:space-between;">
+          <span>現在のデータ（JSON）</span>
+          <span id="sync-stats" style="color:var(--teal);"></span>
+        </div>
+        <textarea id="sync-json" readonly style="width:100%;height:120px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text2);padding:10px;font-size:11px;font-family:'DM Mono',monospace;outline:none;resize:none;"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-teal" onclick="copySyncJson()" style="flex:1;">📋 JSONをコピー</button>
+        <button class="btn btn-ghost" onclick="closeSyncModal()">閉じる</button>
+      </div>
+      <div style="margin-top:16px;background:var(--bg3);border-radius:var(--r);padding:14px;font-size:12px;color:var(--text2);line-height:1.8;">
+        <strong style="color:var(--text);">GASへの貼り付け手順（初回のみ）：</strong><br>
+        1. <a href="https://script.google.com" target="_blank" style="color:var(--blue);">script.google.com</a> を開く<br>
+        2. 「新しいプロジェクト」→ コードを貼り付けて保存<br>
+        3. <code style="background:var(--bg4);padding:1px 5px;border-radius:3px;">setupWeeklyTrigger()</code> を手動実行（トリガー登録）<br>
+        4. 以後、毎週木曜15時に自動で下書き作成 ✅
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ NOTION SETTINGS MODAL ════ -->
+<div class="modal-bg" id="notion-modal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-head">
+      <div class="modal-title">🔗 Notion連携設定</div>
+      <button class="modal-close" onclick="closeNotionSettings()">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="notion-status-bar" style="display:none;margin-bottom:16px;"></div>
+      <div class="ffield">
+        <label>GAS WebアプリURL（デプロイで取得したURL）</label>
+        <input type="text" id="n-gas-url" placeholder="https://script.google.com/macros/s/xxxxx/exec" autocomplete="off">
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--r);padding:14px;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;">データベースID（各URLの32文字）</div>
+        <div class="ffield" style="margin-bottom:8px;">
+          <label>📝 Hema Memos</label>
+          <input type="text" id="n-db-memos" placeholder="32文字のID" autocomplete="off">
+        </div>
+        <div class="ffield" style="margin-bottom:8px;">
+          <label>📊 Infographics</label>
+          <input type="text" id="n-db-infographics" placeholder="32文字のID" autocomplete="off">
+        </div>
+        <div class="ffield" style="margin-bottom:8px;">
+          <label>🎤 Voice Insights</label>
+          <input type="text" id="n-db-voice" placeholder="32文字のID" autocomplete="off">
+        </div>
+        <div class="ffield" style="margin-bottom:0;">
+          <label>📋 Weekly Reports</label>
+          <input type="text" id="n-db-weekly" placeholder="32文字のID" autocomplete="off">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;">
+        <button class="btn btn-ghost btn-sm" onclick="testNotionConnection()">🔌 接続テスト</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" onclick="closeNotionSettings()">キャンセル</button>
+          <button class="btn" style="background:var(--purple);color:#fff;" onclick="saveNotionSettings()">💾 保存</button>
+        </div>
+      </div>
+      <div id="notion-test-result" style="margin-top:12px;font-size:12px;display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ PDF.js ══
+if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ══ AUTH ══
+const USERS={
+  sakai:{pass:'hema2025',display:'酒井先生',role:'attending'},
+  tanaka:{pass:'hema2025',display:'田中先生',role:'resident'},
+  yamada:{pass:'hema2025',display:'山田先生',role:'resident'},
+  nurse1:{pass:'hema2025',display:'看護師①',role:'nurse'},
+};
+let CU=null;
+
+function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  if(USERS[u]&&USERS[u].pass===p){
+    CU={id:u,...USERS[u]};
+    document.getElementById('lerr').style.display='none';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('uname-display').textContent=CU.display;
+    document.getElementById('uavatar').textContent=CU.display.slice(0,2);
+    loadAll();
+  } else {
+    document.getElementById('lerr').style.display='block';
+  }
+}
+function doLogout(){
+  CU=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('lu').value='';document.getElementById('lp').value='';
+}
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ══ STORAGE ══
+const SK='hema-nexus-v1';
+async function save(items){
+  try{await window.storage.set(SK,JSON.stringify(items));}
+  catch{localStorage.setItem(SK,JSON.stringify(items));}
+}
+async function load(){
+  try{const r=await window.storage.get(SK);return r?JSON.parse(r.value):[];}
+  catch{const s=localStorage.getItem(SK);return s?JSON.parse(s):[];}
+}
+let items=[];
+
+async function loadAll(){
+  items=await load();
+  renderFeed();renderQuestions();updateStats();
+  populateQSelect();
+}
+
+// ══ VIEWS ══
+let feedFilter='all';
+function switchView(v){
+  // normal views (left panel)
+  ['feed','questions','post'].forEach(x=>{
+    document.getElementById('view-'+x).classList.toggle('active',x===v);
+  });
+  document.querySelectorAll('.ntab').forEach((t,i)=>{
+    t.classList.toggle('active',['feed','questions','post','voice'][i]===v);
+  });
+  // voice is full-screen, hides main-layout
+  const mainLayout = document.querySelector('.main-layout');
+  const voiceScreen = document.getElementById('voice-screen');
+  if(v==='voice'){
+    mainLayout.style.display='none';
+    voiceScreen.style.display='block';
+    populateViLinkQ();
+    renderInsights();
+  } else {
+    mainLayout.style.display='';
+    voiceScreen.style.display='none';
+  }
+}
+function setPostType(t){
+  document.getElementById('ptype-memo').classList.toggle('active',t==='memo');
+  document.getElementById('ptype-question').classList.toggle('active',t==='question');
+  document.getElementById('cat-field').style.display=t==='question'?'none':'block';
+  document.getElementById('body-label').textContent=t==='question'?'疑問・相談内容 *':'内容（自由記載）';
+  document.getElementById('p-body').placeholder=t==='question'?'例: リツキシマブの前治療薬は何がベストか？根拠となる論文が知りたい。':'診療メモ、気づき、ガイドラインとの差異など';
+  document.getElementById('p-body').dataset.type=t;
+}
+
+// ══ POST ══
+async function submitPost(){
+  const title=document.getElementById('p-title').value.trim();
+  const body=document.getElementById('p-body').value.trim();
+  const t=document.getElementById('p-body').dataset.type||'memo';
+  if(!title||!body){document.getElementById('perr').style.display='block';return;}
+  document.getElementById('perr').style.display='none';
+  const item={
+    id:Date.now(),type:t,title,body,
+    cat:t==='question'?'question':document.getElementById('p-cat').value,
+    comment:document.getElementById('p-comment').value.trim(),
+    author:CU.display,authorId:CU.id,
+    date:new Date().toISOString(),
+    answered:false,infographic:null,
+  };
+  items.unshift(item);
+  await save(items);
+  saveToNotion(item);  // Notionに自動保存
+  clearPost();renderFeed();renderQuestions();updateStats();populateQSelect();
+  switchView(t==='question'?'questions':'feed');
+  showToast(t==='question'?'疑問を投稿しました':'メモを投稿しました');
+}
+function clearPost(){
+  ['p-title','p-body','p-comment'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('p-cat').selectedIndex=0;
+  document.getElementById('perr').style.display='none';
+}
+
+// ══ RENDER FEED ══
+const CAT={disease:'疾患',flow:'鑑別フロー',infection:'感染症',procedure:'手技',other:'その他',question:'疑問'};
+function filterFeed(f,btn){
+  feedFilter=f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderFeed();
+}
+function renderFeed(){
+  const list=document.getElementById('feed-list');
+  let data=items.filter(i=>i.type!=='question'||i.answered);
+  if(feedFilter==='answered') data=data.filter(i=>i.type==='question'&&i.answered);
+  else if(feedFilter!=='all') data=data.filter(i=>i.cat===feedFilter&&i.type!=='question');
+  document.getElementById('feed-count').textContent=data.length+' 件';
+  if(!data.length){list.innerHTML='<div class="empty"><div class="icon">📋</div><p>該当するメモがありません</p></div>';return;}
+  list.innerHTML=data.map(m=>{
+    const d=new Date(m.date);
+    const ds=`${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const tagClass=m.type==='question'?'tag-answered':'tag-'+m.cat;
+    const tagLabel=m.type==='question'?'回答済み':CAT[m.cat]||m.cat;
+    const preview=m.body.length>150?m.body.slice(0,150)+'…':m.body;
+    const igBtn=m.infographic?`<button class="btn btn-ghost btn-xs" onclick="viewIg(${m.id})">📊 図表を見る</button>`:'';
+    return `<div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">${e(m.title)}</div>
+          <div class="card-meta"><span class="tag ${tagClass}">${tagLabel}</span><span>${e(m.author)}</span><span>${ds}</span></div>
+        </div>
+        ${igBtn}
+      </div>
+      <div class="card-body">${e(preview)}</div>
+      ${m.comment?`<div style="font-size:11px;color:var(--text3);margin-top:6px;font-style:italic;">"${e(m.comment)}"</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ══ RENDER QUESTIONS ══
+function renderQuestions(){
+  const list=document.getElementById('q-list');
+  const qs=items.filter(i=>i.type==='question'&&!i.answered);
+  const badge=document.getElementById('q-badge');
+  badge.textContent=qs.length;
+  badge.style.display=qs.length>0?'inline-flex':'none';
+  if(!qs.length){list.innerHTML='<div class="empty"><div class="icon">✅</div><p>未回答の疑問はありません</p></div>';return;}
+  list.innerHTML=qs.map(q=>{
+    const d=new Date(q.date);
+    const ds=`${d.getMonth()+1}/${d.getDate()}`;
+    return `<div class="q-card unanswered">
+      <div class="q-card-head">
+        <div style="flex:1">
+          <div class="card-meta" style="margin-bottom:4px;"><span class="tag tag-q">未回答</span><span>${e(q.author)}</span><span>${ds}</span></div>
+          <div class="q-card-body">${e(q.title)}</div>
+          ${q.body?`<div style="font-size:12px;color:var(--text2);line-height:1.5;">${e(q.body.slice(0,100))}${q.body.length>100?'…':''}</div>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+        <button class="btn btn-ghost btn-xs" onclick="searchFromQ(${q.id})">🔍 PubMed検索</button>
+        <button class="btn btn-amber btn-xs" onclick="openIgModal(${q.id})">📊 インフォグラフィック生成</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats(){
+  document.getElementById('st-total').textContent=items.length;
+  document.getElementById('st-q').textContent=items.filter(i=>i.type==='question'&&!i.answered).length;
+  document.getElementById('st-ig').textContent=items.filter(i=>i.infographic).length;
+}
+
+// ══ PUBMED SEARCH ══
+let selectedPaper=null;
+async function searchPubmed(){
+  const q=document.getElementById('pm-query').value.trim();
+  if(!q)return;
+  const btn=document.getElementById('pm-btn');
+  btn.textContent='…';btn.disabled=true;
+  document.getElementById('pm-results').innerHTML='<div style="font-size:12px;color:var(--text2);padding:4px 0;">検索中...</div>';
+  try{
+    const url=`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(q)}&retmax=5&retmode=json&sort=relevance`;
+    const r=await fetch(url);const d=await r.json();
+    const ids=d.esearchresult?.idlist||[];
+    if(!ids.length){document.getElementById('pm-results').innerHTML='<div style="font-size:12px;color:var(--text3);">結果がありません</div>';return;}
+    const sumUrl=`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.join(',')}&retmode=json`;
+    const sr=await fetch(sumUrl);const sd=await sr.json();
+    const papers=ids.map(id=>{
+      const p=sd.result[id];
+      return{id,title:p.title||'',authors:(p.authors||[]).slice(0,3).map(a=>a.name).join(', '),journal:p.fulljournalname||p.source||'',year:p.pubdate?.slice(0,4)||'',abstract:''};
+    });
+    renderPaperCards(papers);
+  }catch(err){
+    document.getElementById('pm-results').innerHTML='<div style="font-size:12px;color:var(--red);">検索エラー。しばらくしてから再試行してください。</div>';
+  }
+  btn.textContent='検索';btn.disabled=false;
+}
+
+function renderPaperCards(papers){
+  const el=document.getElementById('pm-results');
+  if(!papers.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);">結果なし</div>';return;}
+  el.innerHTML=papers.map((p,i)=>`
+    <div class="paper-card" id="pc-${p.id}" onclick="selectPaper(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+      <div class="paper-title">${e(p.title)}</div>
+      <div class="paper-meta">${e(p.authors)} — ${e(p.journal)} ${e(p.year)} · PMID ${p.id}</div>
+    </div>`).join('');
+}
+
+function selectPaper(p){
+  selectedPaper=p;
+  document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('pc-'+p.id)?.classList.add('selected');
+  // show generate button under pubmed panel
+  let wrap=document.getElementById('pm-actions');
+  wrap.style.display='flex';
+  wrap.innerHTML=`<button class="btn btn-amber btn-sm" onclick="openIgModal(null)" style="width:100%">📊 この論文でインフォグラフィック生成</button>`;
+  showToast('論文を選択しました');
+}
+
+function searchFromQ(qid){
+  const q=items.find(i=>i.id===qid);
+  if(!q)return;
+  document.getElementById('pm-query').value=q.title;
+  searchPubmed();
+  document.getElementById('pm-results').scrollIntoView({behavior:'smooth'});
+}
+
+// ══ IG MODAL ══
+let igSourceType=null;let igPdfText=null;let igLinkedQId=null;let igData=null;
+
+function openIgModal(qid){
+  igLinkedQId=qid;igSourceType=null;igPdfText=null;igData=null;
+  document.getElementById('ig-step1').style.display='block';
+  document.getElementById('ig-step2').style.display='none';
+  document.getElementById('ig-src-pdf').style.display='none';
+  document.getElementById('ig-src-text').style.display='none';
+  document.getElementById('ig-pdf-info').style.display='none';
+  document.getElementById('ig-drop').style.display='block';
+  document.getElementById('ig-prog-wrap').style.display='none';
+  const selCard=document.getElementById('src-selected');
+  if(selectedPaper){
+    selCard.style.display='block';
+    document.getElementById('src-selected-meta').textContent=selectedPaper.authors+' '+selectedPaper.year;
+  } else {selCard.style.display='none';}
+  populateQSelect(qid);
+  document.getElementById('ig-modal').classList.add('open');
+}
+function closeIgModal(){document.getElementById('ig-modal').classList.remove('open');}
+function backIgStep1(){
+  document.getElementById('ig-step1').style.display='block';
+  document.getElementById('ig-step2').style.display='none';
+  igData=null;
+}
+
+function setIgSource(t){
+  igSourceType=t;
+  document.getElementById('ig-src-pdf').style.display=t==='pdf'?'block':'none';
+  document.getElementById('ig-src-text').style.display=t==='text'?'block':'none';
+  document.querySelectorAll('#ig-step1 .paper-card').forEach(c=>c.classList.remove('selected'));
+  if(t==='selected') document.getElementById('src-selected')?.classList.add('selected');
+  document.getElementById('ig-link-q').style.display='block';
+}
+
+function populateQSelect(defaultId){
+  const sel=document.getElementById('ig-q-select');
+  const qs=items.filter(i=>i.type==='question'&&!i.answered);
+  sel.innerHTML='<option value="">紐付けなし</option>'+qs.map(q=>`<option value="${q.id}" ${q.id===defaultId?'selected':''}>${e(q.title.slice(0,40))}</option>`).join('');
+}
+
+async function handleIgPdf(file){
+  if(!file)return;
+  const info=document.getElementById('ig-pdf-info');
+  info.innerHTML='<div style="font-size:12px;color:var(--text2);">読み込み中...</div>';
+  info.style.display='block';
+  try{
+    const ab=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:ab}).promise;
+    let txt='';
+    for(let p=1;p<=Math.min(pdf.numPages,20);p++){
+      const pg=await pdf.getPage(p);
+      const c=await pg.getTextContent();
+      txt+=c.items.map(i=>i.str).join(' ')+'\n';
+    }
+    igPdfText=txt.replace(/\s+/g,' ').trim();
+    document.getElementById('ig-drop').style.display='none';
+    info.innerHTML=`<div class="pdf-loaded-bar"><span>✅</span><span style="flex:1;font-size:13px;color:var(--blue);">${e(file.name)}</span><span style="font-size:11px;color:var(--text2);">${pdf.numPages}p / ${Math.round(igPdfText.length/1000)}K文字</span><button class="pdf-rm" onclick="resetIgPdf()">×</button></div>`;
+  }catch(err){info.innerHTML='<div style="font-size:12px;color:var(--red);">PDF読み込みエラー: '+e(err.message)+'</div>';}
+}
+
+function resetIgPdf(){
+  igPdfText=null;
+  document.getElementById('ig-drop').style.display='block';
+  document.getElementById('ig-pdf-info').style.display='none';
+}
+
+async function runIgGeneration(){
+  // Determine text source
+  let text='';
+  if(igSourceType==='selected'&&selectedPaper){
+    text=`Title: ${selectedPaper.title}\nAuthors: ${selectedPaper.authors}\nJournal: ${selectedPaper.journal} ${selectedPaper.year}\nPMID: ${selectedPaper.id}\n\n[Abstract not available via API — AI will generate based on title/metadata and general knowledge of this paper]`;
+  } else if(igSourceType==='pdf'&&igPdfText){
+    text=igPdfText;
+  } else if(igSourceType==='text'){
+    text=document.getElementById('ig-text-inp').value.trim();
+  }
+  if(!text||text.length<30){alert('論文のソースを選択・入力してください');return;}
+
+  const btn=document.getElementById('ig-gen-btn');
+  btn.disabled=true;btn.textContent='生成中...';
+  showIgProg(10,'論文を解析中...');
+
+  try{
+    const {system,user}=buildIgPrompt(text);
+    showIgProg(30,'Claude APIに送信中...');
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:user}]})
+    });
+    showIgProg(65,'結果を受信中...');
+    const data=await res.json();
+    const raw=data.content?.map(c=>c.text||'').join('');
+    igData=extractJSON(raw);
+    showIgProg(85,'インフォグラフィックを描画中...');
+    await new Promise(r=>setTimeout(r,300));
+    renderIgPreview(igData);
+    showIgProg(100,'完成！');
+    await new Promise(r=>setTimeout(r,400));
+    document.getElementById('ig-step1').style.display='none';
+    document.getElementById('ig-step2').style.display='block';
+  }catch(err){
+    alert('エラー: '+err.message);
+  }
+  btn.disabled=false;btn.textContent='✨ インフォグラフィックを生成';
+  document.getElementById('ig-prog-wrap').style.display='none';
+}
+
+function showIgProg(pct,lbl){
+  const w=document.getElementById('ig-prog-wrap');w.style.display='block';
+  document.getElementById('ig-prog-fill').style.width=pct+'%';
+  document.getElementById('ig-prog-lbl').textContent=lbl;
+}
+
+// ══ INFOGRAPHIC PROMPT ══
+function buildIgPrompt(text){
+  const system=`You are a clinical paper JSON extractor. Respond with ONLY a single valid JSON object. No prose, no markdown fences. Complete and parseable. Use only standard half-width ASCII characters for punctuation inside JSON strings. No fullwidth characters like （）in JSON values.`;
+  const user=`Parse the following clinical paper and return ONLY a valid JSON object. Extract all data from the paper; for values not explicitly stated, make reasonable inferences.
+
+PAPER:
+${text.substring(0,4000)}
+
+REQUIRED JSON (return exactly this structure):
+{
+  "title_jp": "Japanese title with conclusion, max 40 chars",
+  "subtitle_en": "Original Paper: [title] / [first author et al.] / [journal] [year]",
+  "setting": {
+    "study_design": "in Japanese",
+    "data_source": "in Japanese",
+    "population": "in Japanese",
+    "exclusion": "in Japanese or N/A",
+    "primary_outcome": "in Japanese",
+    "secondary_outcomes": "in Japanese",
+    "statistical_method": "in Japanese"
+  },
+  "key_results": {
+    "headline": "most important result in Japanese, max 25 chars",
+    "main_metric": {
+      "value": "numeric value e.g. 52",
+      "label": "metric name in Japanese",
+      "sublabel": "brief interpretation in Japanese",
+      "ci": "CI and p-value or key stat as string"
+    },
+    "survival_curve": {
+      "show": true,
+      "group_a_label": "group A name",
+      "group_b_label": "group B name",
+      "timepoints": [0,3,6,9,12,15],
+      "group_a_values": [1.0,0.75,0.58,0.44,0.34,0.26],
+      "group_b_values": [1.0,0.68,0.48,0.35,0.25,0.18],
+      "note": "annotation in Japanese"
+    },
+    "subgroup": {
+      "show": true,
+      "title": "subgroup title in Japanese",
+      "bars": [
+        {"label":"Group A","value":52,"color":"#2563EB"},
+        {"label":"Group B","value":24,"color":"#93C5FD"},
+        {"label":"Group C","value":11,"color":"#BFDBFE"},
+        {"label":"Group D","value":8,"color":"#DBEAFE"}
+      ],
+      "unit": "%",
+      "note": "note in Japanese"
+    },
+    "secondary_metric": {
+      "label": "metric name in Japanese",
+      "value_a": "value",
+      "value_b": "value",
+      "comment": "comment in Japanese"
+    }
+  },
+  "discussion": "3-5 sentences in Japanese",
+  "limitation": "2-4 sentences in Japanese",
+  "conclusion": "2-3 sentences in Japanese"
+}`;
+  return{system,user};
+}
+
+function extractJSON(raw){
+  if(!raw)throw new Error('APIレスポンスが空です');
+  let clean=raw.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
+  try{return JSON.parse(clean);}catch{}
+  const m=raw.match(/\{[\s\S]*\}/);
+  if(m){try{return JSON.parse(m[0]);}catch{}}
+  let start=raw.indexOf('{'),depth=0,end=-1;
+  for(let i=start;i<raw.length;i++){if(raw[i]==='{')depth++;else if(raw[i]==='}'){depth--;if(depth===0){end=i;break;}}}
+  if(start>=0&&end>start){try{return JSON.parse(raw.slice(start,end+1));}catch{}}
+  let san=raw.replace(/[\u201C\u201D]/g,'"').replace(/[\u2018\u2019]/g,"'").replace(/\u3000/g,' ').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'').replace(/,\s*([}\]])/g,'$1');
+  const m2=san.match(/\{[\s\S]*\}/);
+  if(m2){try{return JSON.parse(m2[0]);}catch(err){throw new Error('JSON解析失敗: '+err.message);}}
+  throw new Error('JSONを抽出できませんでした');
+}
+
+// ══ RENDER IG INLINE ══
+function renderIgPreview(d){
+  const el=document.getElementById('ig-inline-preview');
+  el.innerHTML=`
+  <div class="ig-preview">
+    <div class="ig-preview-head">
+      <div class="ig-preview-title">${e(d.title_jp)}</div>
+      <div class="ig-preview-sub">${e(d.subtitle_en)}</div>
+    </div>
+    <div class="ig-preview-cols">
+      ${renderIgLeft(d.setting)}
+      ${renderIgCenter(d.key_results)}
+      ${renderIgRight(d)}
+    </div>
+  </div>`;
+  setTimeout(()=>{
+    if(d.key_results?.survival_curve?.show) renderSurvivalChart('ig-sc',d.key_results.survival_curve,true);
+    if(d.key_results?.subgroup?.show) renderBarChart('ig-bc',d.key_results.subgroup,true);
+  },60);
+}
+
+function renderIgLeft(s){
+  const items=[
+    {icon:'🔬',lbl:'Study design',val:s.study_design},
+    {icon:'🗄️',lbl:'Data source',val:s.data_source},
+    {icon:'👥',lbl:'Population',val:s.population},
+    {icon:'🚫',lbl:'Exclusion',val:s.exclusion},
+    {icon:'🎯',lbl:'Primary outcome',val:s.primary_outcome},
+    {icon:'📊',lbl:'Secondary outcomes',val:s.secondary_outcomes},
+    {icon:'📐',lbl:'Statistical methods',val:s.statistical_method},
+  ];
+  const rows=items.filter(i=>i.val&&i.val!=='N/A').map(i=>`
+    <div class="ig-si"><div class="ig-si-icon">${i.icon}</div>
+    <div><div class="ig-si-lbl">${i.lbl}</div><div class="ig-si-val">${e(i.val)}</div></div></div>`).join('');
+  return `<div class="ig-left"><div class="ig-col-head">SETTING</div><div class="ig-setting-list">${rows}</div></div>`;
+}
+
+function renderIgCenter(kr){
+  const m=kr.main_metric;
+  let sec='';
+  if(kr.secondary_metric?.label){
+    const sm=kr.secondary_metric;
+    sec=`<div class="ig-num-box" style="background:#F0FDF4;border-color:#059669;margin-top:4px;">
+      <div class="ig-num" style="font-size:11px;color:#065F46;">${e(sm.label)}</div>
+      <div class="ig-num-desc">群A: ${e(sm.value_a)} 群B: ${e(sm.value_b)} ${e(sm.comment)}</div></div>`;
+  }
+  return `<div class="ig-center"><div class="ig-col-head">KEY RESULTS</div>
+  <div class="ig-center-body">
+    <div class="ig-headline">${e(kr.headline)}</div>
+    ${kr.survival_curve?.show?`<div style="margin-bottom:8px;"><div style="font-size:9px;font-weight:700;color:#4B5563;margin-bottom:3px;">Kaplan-Meier 生存曲線</div><div class="ig-chart-wrap"><canvas id="ig-sc"></canvas></div></div>`:''}
+    <div class="ig-num-box"><div><span class="ig-num">${e(m.value)}</span> <span style="font-size:11px;font-weight:600;color:#2563EB;">${e(m.label)}</span></div>
+    <div class="ig-num-desc">${e(m.sublabel)}</div>
+    <div class="ig-num-desc" style="font-size:8px;color:#9CA3AF;margin-top:2px;">${e(m.ci)}</div></div>
+    ${sec}
+    ${kr.subgroup?.show?`<div style="margin-top:8px;"><div style="font-size:9px;font-weight:700;color:#4B5563;margin-bottom:2px;">SUBGROUP ANALYSIS</div><div style="font-size:9px;color:#4B5563;margin-bottom:4px;">${e(kr.subgroup.title)}</div><div class="ig-bar-wrap"><canvas id="ig-bc"></canvas></div></div>`:''}
+  </div></div>`;
+}
+
+function renderIgRight(d){
+  return `<div class="ig-right"><div class="ig-col-head">DISCUSSION / CONCLUSION</div>
+  <div class="ig-right-body">
+    <div class="ig-rb"><div class="ig-rb-head">| DISCUSSION</div><div class="ig-rb-text">${e(d.discussion)}</div></div>
+    <div class="ig-divider"></div>
+    <div class="ig-rb"><div class="ig-rb-head" style="border-color:#9CA3AF;">| LIMITATION</div><div class="ig-rb-text">${e(d.limitation)}</div></div>
+    <div class="ig-divider"></div>
+    <div class="ig-rb conclusion"><div class="ig-rb-head">| CONCLUSION</div><div class="ig-rb-text">${e(d.conclusion)}</div></div>
+  </div></div>`;
+}
+
+// ══ CHARTS ══
+function renderSurvivalChart(canvasId,sc,small){
+  const ctx=document.getElementById(canvasId);if(!ctx)return;
+  new Chart(ctx,{type:'line',data:{
+    labels:sc.timepoints.map(t=>t+' mo'),
+    datasets:[
+      {label:sc.group_a_label,data:sc.group_a_values,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,.08)',borderWidth:small?1.5:2.5,pointRadius:0,fill:true,tension:.3},
+      {label:sc.group_b_label,data:sc.group_b_values,borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.04)',borderWidth:small?1.2:2,pointRadius:0,fill:true,tension:.3,borderDash:[4,3]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:small?8:10},boxWidth:10,padding:6}},tooltip:{enabled:false}},
+      scales:{
+        x:{title:{display:true,text:'Time (Months)',font:{size:small?7:9}},ticks:{font:{size:small?7:9}},grid:{color:'rgba(0,0,0,.05)'}},
+        y:{min:0,max:1.05,ticks:{font:{size:small?7:9},stepSize:.2},grid:{color:'rgba(0,0,0,.05)'}},
+      }}});
+}
+function renderBarChart(canvasId,sg,small){
+  const ctx=document.getElementById(canvasId);if(!ctx)return;
+  new Chart(ctx,{type:'bar',data:{
+    labels:sg.bars.map(b=>b.label),
+    datasets:[{data:sg.bars.map(b=>b.value),backgroundColor:sg.bars.map(b=>b.color||'#2563EB'),borderRadius:3,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+(sg.unit||'')}}},
+      scales:{
+        x:{ticks:{font:{size:small?7:9}},grid:{display:false}},
+        y:{ticks:{font:{size:small?7:9}},grid:{color:'rgba(0,0,0,.05)'}},
+      }}});
+}
+
+// ══ SAVE IG TO BASE ══
+async function saveIgToBase(){
+  if(!igData)return;
+  const qid=parseInt(document.getElementById('ig-q-select').value)||null;
+  const newItem={
+    id:Date.now(),type:'memo',title:igData.title_jp,
+    body:igData.discussion+'\n\n【Limitation】\n'+igData.limitation,
+    cat:'disease',comment:igData.subtitle_en,
+    author:CU.display,authorId:CU.id,
+    date:new Date().toISOString(),
+    answered:false,infographic:igData,
+  };
+  items.unshift(newItem);
+  if(qid){
+    const qi=items.find(i=>i.id===qid);
+    if(qi){qi.answered=true;qi.answerId=newItem.id;}
+  }
+  await save(items);
+  saveToNotion(newItem);                        // Notion Memos DBに保存
+  saveInfographicToNotion(igData, newItem.title); // Notion Infographics DBに保存
+  renderFeed();renderQuestions();updateStats();populateQSelect();
+  closeIgModal();selectedPaper=null;
+  document.getElementById('pm-actions').style.display='none';
+  switchView('feed');
+  showToast('インフォグラフィックを保存しました'+(qid?' ✅ 疑問を回答済みにしました':''));
+}
+
+function viewIg(id){
+  const item=items.find(i=>i.id===id);
+  if(!item?.infographic)return;
+  igData=item.infographic;
+  document.getElementById('ig-step1').style.display='none';
+  document.getElementById('ig-step2').style.display='block';
+  renderIgPreview(igData);
+  document.getElementById('ig-modal').classList.add('open');
+}
+
+// ══ AI CHAT ══
+let aiBusy=false;
+function buildCtx(){
+  if(!items.length)return '（まだ投稿はありません）';
+  const qs=items.filter(i=>i.type==='question'&&!i.answered);
+  const ms=items.filter(i=>i.type!=='question').slice(0,20);
+  let ctx='【未回答の疑問】\n'+qs.slice(0,10).map((q,i)=>`${i+1}. ${q.title} (${q.author}, ${new Date(q.date).toLocaleDateString('ja-JP')})`).join('\n');
+  ctx+='\n\n【蓄積メモ（直近20件）】\n'+ms.map((m,i)=>`[${i+1}] ${m.title} | ${m.cat} | ${m.author} | ${m.body.slice(0,200)}`).join('\n\n');
+  return ctx;
+}
+async function sendAI(){
+  if(aiBusy)return;
+  const inp=document.getElementById('ai-inp');
+  const q=inp.value.trim();if(!q)return;
+  inp.value='';inp.style.height='';
+  addMsg('user',q);
+  aiBusy=true;document.getElementById('ai-send').disabled=true;
+  addTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:800,
+        system:`あなたは血液内科の科内知識ベースAIです。以下の情報をもとに質問に答えてください。\n\n${buildCtx()}\n\nPubMed検索が必要な場合はクエリを提案してください。回答は日本語・300字以内で箇条書きを使いわかりやすく。`,
+        messages:[{role:'user',content:q}]
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    addMsg('ai',data.content?.map(c=>c.text||'').join('')||'エラーが発生しました');
+  }catch{removeTyping();addMsg('ai','通信エラーが発生しました');}
+  aiBusy=false;document.getElementById('ai-send').disabled=false;
+}
+function quickAsk(q){document.getElementById('ai-inp').value=q;sendAI();}
+function handleAiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAI();}}
+function addMsg(role,text){
+  const box=document.getElementById('ai-msgs');
+  const d=document.createElement('div');d.className='msg '+role;
+  const lbl=role==='ai'?'AI':(CU?.display.slice(0,2)||'--');
+  d.innerHTML=`<div class="msg-av">${lbl}</div><div class="msg-bub">${e(text)}</div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function addTyping(){
+  const box=document.getElementById('ai-msgs');
+  const d=document.createElement('div');d.className='msg ai';d.id='tdot';
+  d.innerHTML=`<div class="msg-av">AI</div><div class="msg-bub typing-bub"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function removeTyping(){document.getElementById('tdot')?.remove();}
+function autoR(el){el.style.height='';el.style.height=Math.min(el.scrollHeight,80)+'px';}
+
+// ══ UTILS ══
+function e(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// ══ VOICE INSIGHT ══
+let recognition=null;let isRecording=false;let viFilter='all';
+
+function initSpeech(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showToast('このブラウザは音声認識に対応していません（Chrome推奨）');return null;}
+  const r=new SR();
+  r.lang='ja-JP';r.continuous=true;r.interimResults=true;
+  r.onresult=ev=>{
+    let interim='';let final='';
+    for(let i=ev.resultIndex;i<ev.results.length;i++){
+      if(ev.results[i].isFinal) final+=ev.results[i][0].transcript;
+      else interim+=ev.results[i][0].transcript;
+    }
+    const ta=document.getElementById('vi-body');
+    const tr=document.getElementById('voice-transcript');
+    if(final){
+      ta.value+=(ta.value?'\n':'')+final;
+      tr.textContent=ta.value;
+      tr.classList.remove('empty');
+    } else if(interim){
+      tr.textContent=(ta.value?ta.value+'\n':'')+interim+'…';
+      tr.classList.remove('empty');
+    }
+  };
+  r.onerror=ev=>{
+    if(ev.error==='not-allowed') showToast('マイクの使用を許可してください');
+    stopRecording();
+  };
+  r.onend=()=>{ if(isRecording) r.start(); };
+  return r;
+}
+
+function toggleRecording(){
+  if(isRecording) stopRecording();
+  else startRecording();
+}
+
+function startRecording(){
+  if(!recognition) recognition=initSpeech();
+  if(!recognition) return;
+  recognition.start();
+  isRecording=true;
+  document.getElementById('mic-btn').classList.add('recording');
+  document.getElementById('mic-btn').textContent='⏹️';
+  document.getElementById('mic-status').textContent='録音中… タップで停止';
+}
+
+function stopRecording(){
+  if(recognition) recognition.stop();
+  isRecording=false;
+  document.getElementById('mic-btn').classList.remove('recording');
+  document.getElementById('mic-btn').textContent='🎙️';
+  document.getElementById('mic-status').textContent='タップして録音開始';
+  // sync transcript to textarea
+  const tr=document.getElementById('voice-transcript').textContent;
+  if(tr&&!document.getElementById('vi-body').value) document.getElementById('vi-body').value=tr;
+}
+
+function selectItag(btn){
+  document.querySelectorAll('.itag').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function populateViLinkQ(){
+  const sel=document.getElementById('vi-link-q');
+  const qs=items.filter(i=>i.type==='question');
+  sel.innerHTML='<option value="">紐付けなし</option>'+qs.map(q=>`<option value="${q.id}">${e(q.title.slice(0,45))}</option>`).join('');
+}
+
+async function saveInsight(){
+  const body=document.getElementById('vi-body').value.trim();
+  if(!body){showToast('メモ内容を入力または録音してください');return;}
+  const tag=document.querySelector('.itag.active')?.dataset.tag||'clinical';
+  const qid=parseInt(document.getElementById('vi-link-q').value)||null;
+  setViProg(20,'AIがインサイトを整理中...');
+  let aiResult={title:'',summary:'',presentation_angle:''};
+  try{
+    const sys=`あなたは血液内科の学術支援AIです。医師の音声メモを簡潔に構造化し、学会発表への活用可能性を評価してください。JSONのみ返してください。`;
+    const usr=`以下の音声メモを解析して、このJSONで返してください：
+{"title":"15字以内の日本語タイトル","summary":"2〜3文の要約（日本語）","presentation_angle":"学会発表テーマとして発展させるなら何を検討すべきか（1〜2文、日本語）","keywords":["キーワード1","キーワード2","キーワード3"]}
+
+メモ:
+${body.substring(0,1000)}`;
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:sys,messages:[{role:'user',content:usr}]})
+    });
+    setViProg(70,'処理中...');
+    const data=await res.json();
+    const raw=data.content?.map(c=>c.text||'').join('');
+    try{ aiResult=JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch{}
+  }catch(err){ console.error(err); }
+  setViProg(90,'保存中...');
+  const insight={
+    id:Date.now(),type:'insight',tag,
+    title:document.getElementById('vi-title').value.trim()||aiResult.title||body.slice(0,30),
+    body,aiSummary:aiResult.summary||'',
+    presentationAngle:aiResult.presentation_angle||'',
+    keywords:aiResult.keywords||[],
+    linkedQId:qid,author:CU.display,date:new Date().toISOString(),
+  };
+  items.unshift(insight);
+  await save(items);
+  saveToNotion(insight);  // Notion Voice Insights DBに保存
+  setViProg(100,'保存完了！');
+  await new Promise(r=>setTimeout(r,500));
+  document.getElementById('vi-prog').style.display='none';
+  clearVoice();
+  renderInsights();
+  updateStats();
+  showToast('インサイトを保存しました');
+}
+
+function setViProg(pct,lbl){
+  const w=document.getElementById('vi-prog');w.style.display='block';
+  document.getElementById('vi-prog-fill').style.width=pct+'%';
+  document.getElementById('vi-prog-lbl').textContent=lbl;
+}
+
+function clearVoice(){
+  document.getElementById('vi-title').value='';
+  document.getElementById('vi-body').value='';
+  const tr=document.getElementById('voice-transcript');
+  tr.textContent='録音すると、ここにテキストが表示されます...';
+  tr.classList.add('empty');
+  document.getElementById('vi-prog').style.display='none';
+  if(isRecording) stopRecording();
+}
+
+function filterInsights(f,btn){
+  viFilter=f;
+  document.querySelectorAll('#voice-screen .fchip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderInsights();
+}
+
+function renderInsights(){
+  const list=document.getElementById('insight-list');
+  let data=items.filter(i=>i.type==='insight');
+  if(viFilter!=='all') data=data.filter(i=>i.tag===viFilter);
+  if(!data.length){
+    list.innerHTML='<div class="empty"><div class="icon">🎤</div><p>まだインサイトがありません。<br>録音してメモを蓄積しましょう。</p></div>';
+    return;
+  }
+  const tagMap={clinical:{cls:'itag-clinical',lbl:'💡 臨床的気づき'},idea:{cls:'itag-idea',lbl:'🏆 発表アイデア'},data:{cls:'itag-data',lbl:'📊 自科データ照合'}};
+  const cardBorder={clinical:'var(--purple)',idea:'var(--amber)',data:'var(--teal)'};
+  list.innerHTML=data.map(ins=>{
+    const tm=tagMap[ins.tag]||tagMap.clinical;
+    const d=new Date(ins.date);
+    const ds=`${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const kw=ins.keywords?.map(k=>`<span style="background:var(--bg4);border-radius:4px;padding:1px 6px;font-size:10px;color:var(--text2);">${e(k)}</span>`).join(' ')||'';
+    return `<div class="insight-card" style="border-left-color:${cardBorder[ins.tag]||'var(--purple)'};">
+      <div class="insight-card-head">
+        <div class="insight-card-title">${e(ins.title)}</div>
+        <span class="itag-display ${tm.cls}">${tm.lbl}</span>
+      </div>
+      <div class="insight-card-body">${e(ins.body.slice(0,200))}${ins.body.length>200?'…':''}</div>
+      ${ins.aiSummary?`<div class="ai-insight-box">🤖 ${e(ins.aiSummary)}</div>`:''}
+      ${ins.presentationAngle?`<div style="margin-top:6px;font-size:11px;color:var(--purple);"><span style="font-weight:700;">発表角度:</span> ${e(ins.presentationAngle)}</div>`:''}
+      <div class="insight-card-meta">${kw} &nbsp;${e(ins.author)} · ${ds}</div>
+    </div>`;
+  }).join('');
+}
+
+async function generatePresentationSeeds(){
+  const ideas=items.filter(i=>i.type==='insight');
+  if(!ideas.length){showToast('インサイトがまだありません');return;}
+  const seedsDiv=document.getElementById('presentation-seeds');
+  const seedsContent=document.getElementById('seeds-content');
+  seedsContent.innerHTML='<div style="font-size:12px;color:var(--text2);">AIが分析中...</div>';
+  seedsDiv.style.display='block';
+  const ctx=ideas.slice(0,20).map((ins,i)=>`[${i+1}] ${ins.title}: ${ins.body.slice(0,150)} / 発表角度: ${ins.presentationAngle||'未設定'}`).join('\n');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:800,
+        system:'血液内科の学術支援AIです。蓄積されたインサイトから学会発表候補テーマを3つ提案してください。JSONのみ返してください。',
+        messages:[{role:'user',content:`以下のインサイトを分析し、学会発表候補を3つ提案してください。
+[{"title":"テーマタイトル","rationale":"なぜ発表価値があるか（2文）","design":"推奨される研究デザイン（1文）","conference":"適切な学会名（例: ASH, JSH）"}]
+
+インサイト:\n${ctx}`}]
+      })
+    });
+    const data=await res.json();
+    const raw=data.content?.map(c=>c.text||'').join('');
+    let seeds=[];
+    try{ seeds=JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch{}
+    if(!seeds.length){seedsContent.innerHTML='<div style="font-size:12px;color:var(--text3);">提案を生成できませんでした</div>';return;}
+    seedsContent.innerHTML=seeds.map(s=>`
+      <div class="presentation-seed">
+        <div class="presentation-seed-title">🏆 ${e(s.title)} <span style="font-size:10px;color:var(--text3);font-weight:400;">${e(s.conference||'')}</span></div>
+        <div class="presentation-seed-body">${e(s.rationale||'')}<br><span style="color:var(--text3);">推奨デザイン:</span> ${e(s.design||'')}</div>
+      </div>`).join('');
+  }catch(err){
+    seedsContent.innerHTML='<div style="font-size:12px;color:var(--red);">エラーが発生しました</div>';
+  }
+}
+
+// ══ WEEKLY EXPORT (for Google Apps Script) ══
+function exportForGAS(){
+  const data = JSON.stringify(items, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'hema-nexus-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('エクスポート完了。Google Drive の「マイドライブ」にアップロードしてください。');
+}
+
+// ══ GAS SYNC MODAL ══
+function showSyncModal(){
+  const json=JSON.stringify(items,null,2);
+  document.getElementById('sync-json').value=json;
+  const qs=items.filter(i=>i.type==='question'&&!i.answered).length;
+  const ms=items.filter(i=>i.type!=='question').length;
+  document.getElementById('sync-stats').textContent=`計${items.length}件（疑問${qs}件・メモ${ms}件）`;
+  document.getElementById('sync-modal').classList.add('open');
+}
+function closeSyncModal(){document.getElementById('sync-modal').classList.remove('open');}
+function copySyncJson(){
+  navigator.clipboard.writeText(document.getElementById('sync-json').value)
+    .then(()=>showToast('JSONをコピーしました。GASに貼り付けてください'))
+    .catch(()=>{document.getElementById('sync-json').select();document.execCommand('copy');showToast('コピーしました');});
+}
+
+// ══ NOTION INTEGRATION ══
+const NOTION_SK = 'hema-notion-config';
+
+// デフォルト設定（埋め込み済み）
+const NOTION_DEFAULTS = {
+  gasUrl: 'https://script.google.com/macros/s/AKfycbx9g3gBjLrpeVwd-bkpwtNi1BOiDy_y8shUZh8HoISKuan8rDSL7aBTEiNuXWvI54tF/exec',
+  dbMemos:        '32c315decd488003b615f30f9efa6a60',
+  dbInfographics: '32c315decd4880c6ba23dc8d88b89243',
+  dbVoice:        '32c315decd4880b191b1ced632a449f7',
+  dbWeekly:       '32c315decd4880af9b0be9820e4103b5',
+};
+
+function getNotionConfig(){
+  try{
+    const stored = JSON.parse(localStorage.getItem(NOTION_SK)||'{}');
+    // デフォルト値とマージ（localStorageの値が優先）
+    return {...NOTION_DEFAULTS, ...stored};
+  }catch{ return {...NOTION_DEFAULTS}; }
+}
+function saveNotionSettings(){
+  const cfg={
+    gasUrl: document.getElementById('n-gas-url').value.trim(),
+    dbMemos: document.getElementById('n-db-memos').value.trim().replace(/-/g,''),
+    dbInfographics: document.getElementById('n-db-infographics').value.trim().replace(/-/g,''),
+    dbVoice: document.getElementById('n-db-voice').value.trim().replace(/-/g,''),
+    dbWeekly: document.getElementById('n-db-weekly').value.trim().replace(/-/g,''),
+  };
+  if(!cfg.gasUrl||!cfg.dbMemos){
+    showToast('GAS URLとHema MemosのIDは必須です');return;
+  }
+  localStorage.setItem(NOTION_SK, JSON.stringify(cfg));
+  closeNotionSettings();
+  showToast('Notion設定を保存しました');
+  updateNotionStatusBar();
+}
+function openNotionSettings(){
+  const cfg=getNotionConfig();
+  if(cfg.gasUrl) document.getElementById('n-gas-url').value=cfg.gasUrl;
+  if(cfg.dbMemos) document.getElementById('n-db-memos').value=cfg.dbMemos;
+  if(cfg.dbInfographics) document.getElementById('n-db-infographics').value=cfg.dbInfographics;
+  if(cfg.dbVoice) document.getElementById('n-db-voice').value=cfg.dbVoice;
+  if(cfg.dbWeekly) document.getElementById('n-db-weekly').value=cfg.dbWeekly;
+  document.getElementById('notion-test-result').style.display='none';
+  document.getElementById('notion-modal').classList.add('open');
+}
+function closeNotionSettings(){
+  document.getElementById('notion-modal').classList.remove('open');
+}
+
+async function notionAPI(endpoint, method, body, token){
+  const cfg=token?{token}:getNotionConfig();
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:500,
+      system:'You are a Notion API proxy. Call the Notion API on behalf of the user and return the raw JSON response. Return ONLY the JSON result, no explanation.',
+      messages:[{role:'user',content:`Call Notion API:
+Endpoint: https://api.notion.com/v1/${endpoint}
+Method: ${method}
+Token: ${cfg.token}
+Body: ${body?JSON.stringify(body):'none'}
+Return the raw API response JSON only.`}]
+    })
+  });
+  const d=await res.json();
+  const raw=d.content?.map(c=>c.text||'').join('');
+  try{ return JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch{ return {error:raw}; }
+}
+
+// Direct Notion API call via GAS proxy (CORS回避)
+async function callNotion(endpoint, method='GET', body=null){
+  const cfg=getNotionConfig();
+  if(!cfg.gasUrl) throw new Error('GAS URLが設定されていません');
+  const action = endpoint==='users/me' ? 'ping' : 'createPage';
+  const payload={ action, ...( body||{} ) };
+  const res=await fetch(cfg.gasUrl,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify(payload),
+  });
+  const data=await res.json();
+  if(!data.ok) throw new Error(data.error||'GAS proxy error');
+  return data.result;
+}
+
+async function testNotionConnection(){
+  const resultEl=document.getElementById('notion-test-result');
+  resultEl.style.display='block';
+  resultEl.style.color='var(--text2)';
+  resultEl.textContent='接続テスト中...';
+  const gasUrl=document.getElementById('n-gas-url').value.trim();
+  if(!gasUrl){resultEl.textContent='⚠️ GAS URLを入力してください';resultEl.style.color='var(--amber)';return;}
+  try{
+    const res=await fetch(gasUrl,{method:'GET'});
+    const data=await res.json();
+    if(data.ok){
+      resultEl.textContent='✅ 接続成功！Notion APIに正常に接続できました。（'+( data.result?.name||'OK')+'）';
+      resultEl.style.color='var(--teal)';
+    } else {
+      resultEl.textContent='❌ エラー: '+(data.error||JSON.stringify(data));
+      resultEl.style.color='var(--red)';
+    }
+  }catch(err){
+    resultEl.textContent='❌ エラー: '+err.message;
+    resultEl.style.color='var(--red)';
+  }
+}
+
+function updateNotionStatusBar(){
+  const cfg=getNotionConfig();
+  const bar=document.getElementById('notion-status-bar');
+  if(!bar)return;
+  if(cfg.gasUrl){
+    bar.style.display='block';
+    bar.innerHTML='<div style="background:var(--teal-bg);border:1px solid rgba(29,171,122,.3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--teal);">✅ Notion連携設定済み（GAS経由）— 投稿時に自動保存されます</div>';
+  }
+}
+
+// ── Notionに投稿を保存 ──
+async function saveToNotion(item){
+  const cfg=getNotionConfig();
+  if(!cfg.gasUrl||!cfg.dbMemos) return;
+  const dbId=item.type==='insight'?(cfg.dbVoice||cfg.dbMemos):cfg.dbMemos;
+  if(!dbId) return;
+  try{
+    const typeLabel=item.type==='question'?'【疑問】':item.type==='insight'?'【インサイト】':'【メモ】';
+    const res=await fetch(cfg.gasUrl,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        action:'createPage',
+        databaseId:dbId,
+        properties:{
+          '名前':{title:[{text:{content:typeLabel+(item.title||'無題')}}]},
+        },
+        children:[
+          {object:'block',type:'paragraph',paragraph:{rich_text:[
+            {type:'text',text:{content:'投稿者: '+(item.author||'')+'　日時: '+(item.date?new Date(item.date).toLocaleString('ja-JP'):'')+'\nカテゴリ: '+(item.cat||item.tag||'')+'\n\n'+(item.body||'').slice(0,1900)},style:{bold:false}}
+          ]}},
+        ]
+      }),
+    });
+    const data=await res.json();
+    if(data.ok) console.log('Notion保存成功:', data.result?.id);
+    else console.error('Notion保存失敗:', data.error);
+  }catch(err){ console.error('Notion保存エラー:',err); }
+}
+
+async function saveInfographicToNotion(igData, title){
+  const cfg=getNotionConfig();
+  if(!cfg.gasUrl||!cfg.dbInfographics) return;
+  try{
+    const res=await fetch(cfg.gasUrl,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        action:'createPage',
+        databaseId:cfg.dbInfographics,
+        properties:{
+          '名前':{title:[{text:{content:'【論文】'+(igData.title_jp||title||'インフォグラフィック')}}]},
+        },
+        children:[
+          {object:'block',type:'paragraph',paragraph:{rich_text:[{type:'text',text:{content:(igData.subtitle_en||'').slice(0,500)}}]}},
+          {object:'block',type:'heading_2',heading_2:{rich_text:[{type:'text',text:{content:'Discussion'}}]}},
+          {object:'block',type:'paragraph',paragraph:{rich_text:[{type:'text',text:{content:(igData.discussion||'').slice(0,1500)}}]}},
+          {object:'block',type:'heading_2',heading_2:{rich_text:[{type:'text',text:{content:'Conclusion'}}]}},
+          {object:'block',type:'paragraph',paragraph:{rich_text:[{type:'text',text:{content:(igData.conclusion||'').slice(0,1000)}}]}},
+        ]
+      }),
+    });
+    const data=await res.json();
+    if(data.ok) showToast('NotionのInfographicsに保存しました');
+    else console.error('Notion Infographic保存失敗:', data.error);
+  }catch(err){ console.error('Notion Infographic保存エラー:',err); }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  updateNotionStatusBar();
+  const da=document.getElementById('ig-drop');if(!da)return;
+  da.addEventListener('dragover',ev=>{ev.preventDefault();da.classList.add('dragover');});
+  da.addEventListener('dragleave',()=>da.classList.remove('dragover'));
+  da.addEventListener('drop',ev=>{ev.preventDefault();da.classList.remove('dragover');const f=ev.dataTransfer.files[0];if(f)handleIgPdf(f);});
+});
+</script>
+</body>
+</html>
