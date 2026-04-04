@@ -607,6 +607,11 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
     <div class="modal-body">
       <div id="notion-status-bar" style="display:none;margin-bottom:16px;"></div>
       <div class="ffield">
+        <label>Claude APIキー（sk-ant- または ntn_ から始まる文字列）</label>
+        <input type="password" id="n-claude-key" placeholder="sk-ant-xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">console.anthropic.com → API keys で取得。ブラウザ内にのみ保存されます。</div>
+      </div>
+      <div class="ffield">
         <label>GAS WebアプリURL（デプロイで取得したURL）</label>
         <input type="text" id="n-gas-url" placeholder="https://script.google.com/macros/s/xxxxx/exec" autocomplete="off">
       </div>
@@ -969,7 +974,7 @@ async function runIgGeneration(){
     const {system,user}=buildIgPrompt(text);
     showIgProg(30,'Claude APIに送信中...');
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:claudeHeaders(),
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:user}]})
     });
     showIgProg(65,'結果を受信中...');
@@ -1230,7 +1235,7 @@ async function sendAI(){
   addTyping();
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:claudeHeaders(),
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',max_tokens:800,
         system:`あなたは血液内科の科内知識ベースAIです。以下の情報をもとに質問に答えてください。\n\n${buildCtx()}\n\nPubMed検索が必要な場合はクエリを提案してください。回答は日本語・300字以内で箇条書きを使いわかりやすく。`,
@@ -1350,7 +1355,7 @@ async function saveInsight(){
 メモ:
 ${body.substring(0,1000)}`;
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:claudeHeaders(),
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:sys,messages:[{role:'user',content:usr}]})
     });
     setViProg(70,'処理中...');
@@ -1440,7 +1445,7 @@ async function generatePresentationSeeds(){
   const ctx=ideas.slice(0,20).map((ins,i)=>`[${i+1}] ${ins.title}: ${ins.body.slice(0,150)} / 発表角度: ${ins.presentationAngle||'未設定'}`).join('\n');
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:claudeHeaders(),
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',max_tokens:800,
         system:'血液内科の学術支援AIです。蓄積されたインサイトから学会発表候補テーマを3つ提案してください。JSONのみ返してください。',
@@ -1495,6 +1500,18 @@ function copySyncJson(){
 }
 
 // ══ NOTION INTEGRATION ══
+// ══ CLAUDE API KEY ══
+const CLAUDE_SK = 'hema-claude-apikey';
+function getClaudeKey(){ return localStorage.getItem(CLAUDE_SK)||''; }
+function claudeHeaders(){
+  return {
+    'Content-Type':'application/json',
+    'x-api-key': getClaudeKey(),
+    'anthropic-version':'2023-06-01',
+    'anthropic-dangerous-direct-browser-access':'true',
+  };
+}
+
 const NOTION_SK = 'hema-notion-config';
 
 // デフォルト設定（埋め込み済み）
@@ -1514,6 +1531,8 @@ function getNotionConfig(){
   }catch{ return {...NOTION_DEFAULTS}; }
 }
 function saveNotionSettings(){
+  const claudeKey=document.getElementById('n-claude-key').value.trim();
+  if(claudeKey) localStorage.setItem(CLAUDE_SK, claudeKey);
   const cfg={
     gasUrl: document.getElementById('n-gas-url').value.trim(),
     dbMemos: document.getElementById('n-db-memos').value.trim().replace(/-/g,''),
@@ -1526,11 +1545,13 @@ function saveNotionSettings(){
   }
   localStorage.setItem(NOTION_SK, JSON.stringify(cfg));
   closeNotionSettings();
-  showToast('Notion設定を保存しました');
+  showToast('設定を保存しました');
   updateNotionStatusBar();
 }
 function openNotionSettings(){
   const cfg=getNotionConfig();
+  const claudeKey=getClaudeKey();
+  if(claudeKey) document.getElementById('n-claude-key').value=claudeKey;
   if(cfg.gasUrl) document.getElementById('n-gas-url').value=cfg.gasUrl;
   if(cfg.dbMemos) document.getElementById('n-db-memos').value=cfg.dbMemos;
   if(cfg.dbInfographics) document.getElementById('n-db-infographics').value=cfg.dbInfographics;
