@@ -780,8 +780,8 @@ function renderFeed(){
   list.innerHTML=data.map(m=>{
     const d=new Date(m.date);
     const ds=`${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-    const tagClass=m.type==='question'?'tag-answered':'tag-'+m.cat;
-    const tagLabel=m.type==='question'?'回答済み':CAT[m.cat]||m.cat;
+    const tagClass=m.type==='question'?'tag-answered':'tag-'+(m.cat||'other');
+    const tagLabel=m.type==='question'?'回答済み':CAT[m.cat]||m.cat||'その他';
     const preview=m.body.length>150?m.body.slice(0,150)+'…':m.body;
     const igBtn=m.infographic?`<button class="btn btn-ghost btn-xs" onclick="viewIg(${m.id})">📊 図表を見る</button>`:'';
     return `<div class="card">
