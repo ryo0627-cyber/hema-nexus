@@ -1656,7 +1656,7 @@ async function saveToNotion(item){
         },
         children:[
           {object:'block',type:'paragraph',paragraph:{rich_text:[
-            {type:'text',text:{content:'投稿者: '+(item.author||'')+'　日時: '+(item.date?new Date(item.date).toLocaleString('ja-JP'):'')+'\nカテゴリ: '+(item.cat||item.tag||'')+'\n\n'+(item.body||'').slice(0,1900)},style:{bold:false}}
+            {type:'text',text:{content:'投稿者: '+(item.author||'')+'　日時: '+(item.date?new Date(item.date).toLocaleString('ja-JP'):'')+'\nカテゴリ: '+(item.cat||item.tag||'')+'\n\n'+(item.body||'').slice(0,1900)}}
           ]}},
         ]
       }),
