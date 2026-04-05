@@ -1526,7 +1526,6 @@ const NOTION_DEFAULTS = {
 function getNotionConfig(){
   try{
     const stored = JSON.parse(localStorage.getItem(NOTION_SK)||'{}');
-    // デフォルト値とマージ（localStorageの値が優先）
     return {...NOTION_DEFAULTS, ...stored};
   }catch{ return {...NOTION_DEFAULTS}; }
 }
@@ -1638,7 +1637,10 @@ function updateNotionStatusBar(){
 // ── Notionに投稿を保存 ──
 async function saveToNotion(item){
   const cfg=getNotionConfig();
-  if(!cfg.gasUrl||!cfg.dbMemos) return;
+  console.log('[Notion] cfg.gasUrl:', cfg.gasUrl?.slice(0,40));
+  console.log('[Notion] cfg.dbVoice:', cfg.dbVoice);
+  console.log('[Notion] item.type:', item.type);
+  if(!cfg.gasUrl||!cfg.dbMemos) { console.warn('[Notion] 設定なし'); return; }
   const dbId=item.type==='insight'?(cfg.dbVoice||cfg.dbMemos):cfg.dbMemos;
   if(!dbId) return;
   try{
