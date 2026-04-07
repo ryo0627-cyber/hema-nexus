@@ -311,10 +311,10 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
     <div class="topbar-right">
       <div class="user-info" id="uname-display"></div>
       <div class="avatar" id="uavatar"></div>
-      <button class="btn btn-ghost btn-sm" onclick="showSyncModal()" title="GASへデータ同期">📤 週次同期</button>
+      <button class="btn btn-ghost btn-sm" id="btn-sync" onclick="showSyncModal()" title="GASへデータ同期" style="display:none;">📤 週次同期</button>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">ログアウト</button>
-      <button class="btn btn-sm" style="background:rgba(137,87,229,.15);color:var(--purple);border:1px solid rgba(137,87,229,.3);" onclick="openNotionSettings()" title="Notion連携設定">🔗 Notion設定</button>
-      <button class="btn btn-sm" style="background:var(--amber-bg);color:var(--amber);border:1px solid rgba(210,153,34,.3);" onclick="exportForGAS()" title="週次レポート用にデータをエクスポート">📤 週次エクスポート</button>
+      <button class="btn btn-sm" id="btn-notion" style="background:rgba(137,87,229,.15);color:var(--purple);border:1px solid rgba(137,87,229,.3);display:none;" onclick="openNotionSettings()" title="Notion連携設定">🔗 Notion設定</button>
+      <button class="btn btn-sm" id="btn-export" style="background:var(--amber-bg);color:var(--amber);border:1px solid rgba(210,153,34,.3);display:none;" onclick="exportForGAS()" title="週次レポート用にデータをエクスポート">📤 週次エクスポート</button>
     </div>
   </div>
 
@@ -658,6 +658,7 @@ const USERS={
   konuma:{pass:'hema2025',display:'小沼先生',role:'resident'},
   tanaka:{pass:'hema2025',display:'田中先生',role:'resident'},
   hishinuma:{pass:'hema2025',display:'菱沼先生',role:'resident'},
+  resident2:{pass:'hema2025',display:'研修医',role:'resident'},
 };
 let CU=null;
 
@@ -671,6 +672,12 @@ function doLogin(){
     document.getElementById('app').style.display='block';
     document.getElementById('uname-display').textContent=CU.display;
     document.getElementById('uavatar').textContent=CU.display.slice(0,2);
+    // ② role制御: attendingのみ管理ボタン表示
+    const isAdmin=CU.role==='attending';
+    ['btn-sync','btn-notion','btn-export'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.style.display=isAdmin?'':'none';
+    });
     loadAll();
   } else {
     document.getElementById('lerr').style.display='block';
@@ -695,6 +702,8 @@ async function load(){
   catch{const s=localStorage.getItem(SK);return s?JSON.parse(s):[];}
 }
 let items=[];
+const ARCHIVE_MAX=20;
+let showArchive=false;
 
 async function loadAll(){
   items=await load();
@@ -777,7 +786,16 @@ function renderFeed(){
   else if(feedFilter!=='all') data=data.filter(i=>i.cat===feedFilter&&i.type!=='question');
   document.getElementById('feed-count').textContent=data.length+' 件';
   if(!data.length){list.innerHTML='<div class="empty"><div class="icon">📋</div><p>該当するメモがありません</p></div>';return;}
-  list.innerHTML=data.map(m=>{
+  // ③ アーカイブ: 20件超は折りたたむ
+  const overLimit=data.length>ARCHIVE_MAX;
+  const visible=showArchive?data:data.slice(0,ARCHIVE_MAX);
+  const archiveBtn=overLimit?`<div style="text-align:center;margin:12px 0;">
+    <button class="btn btn-ghost btn-sm" onclick="toggleArchive()">
+      ${showArchive?'▲ 折りたたむ':'▼ 過去のメモを見る（'+(data.length-ARCHIVE_MAX)+'件）'}
+    </button>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px;">※ Notionには全件保存済み</div>
+  </div>`:'';
+  list.innerHTML=visible.map(m=>{
     const d=new Date(m.date);
     const ds=`${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
     const tagClass=m.type==='question'?'tag-answered':'tag-'+(m.cat||'other');
@@ -795,8 +813,9 @@ function renderFeed(){
       <div class="card-body">${e(preview)}</div>
       ${m.comment?`<div style="font-size:11px;color:var(--text3);margin-top:6px;font-style:italic;">"${e(m.comment)}"</div>`:''}
     </div>`;
-  }).join('');
+  }).join('')+archiveBtn;
 }
+function toggleArchive(){showArchive=!showArchive;renderFeed();}
 
 // ══ RENDER QUESTIONS ══
 function renderQuestions(){
