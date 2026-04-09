@@ -319,10 +319,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
   </div>
 
   <div class="main-layout">
-    <!-- ── LEFT PANEL ── -->
     <div class="left-panel">
-
-      <!-- FEED VIEW -->
       <div class="view active" id="view-feed">
         <div class="sec-head">
           <div class="sec-title"><span class="dot" style="background:var(--blue)"></span>蓄積メモ</div>
@@ -338,8 +335,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         </div>
         <div id="feed-list"></div>
       </div>
-
-      <!-- QUESTIONS VIEW -->
       <div class="view" id="view-questions">
         <div class="sec-head">
           <div class="sec-title"><span class="dot" style="background:var(--amber)"></span>未回答の疑問</div>
@@ -347,8 +342,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         </div>
         <div id="q-list"></div>
       </div>
-
-      <!-- POST VIEW -->
       <div class="view" id="view-post">
         <div class="sec-title" style="margin-bottom:16px;"><span class="dot" style="background:var(--teal)"></span>新規投稿</div>
         <div class="post-type-switch">
@@ -379,19 +372,14 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
           </div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /left-panel -->
-
-    <!-- ── RIGHT PANEL ── -->
     <div class="right-panel">
-      <!-- Stats -->
       <div class="stats-row">
         <div class="stat-card"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">総投稿数</div></div>
         <div class="stat-card"><div class="stat-num" id="st-q" style="color:var(--amber)">0</div><div class="stat-lbl">未回答疑問</div></div>
         <div class="stat-card"><div class="stat-num" id="st-ig" style="color:var(--teal)">0</div><div class="stat-lbl">インフォグラフィック</div></div>
       </div>
-
-      <!-- PubMed search panel -->
       <div class="pubmed-panel">
         <div class="pubmed-head">
           <span style="font-size:16px">🔍</span>
@@ -405,11 +393,8 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         <div class="pubmed-results" id="pm-results">
           <div style="font-size:12px;color:var(--text3);padding:4px 0;">疑問の疾患・治療名を英語で入力して検索</div>
         </div>
-        <div style="padding:0 12px 10px;display:flex;gap:8px;flex-wrap:wrap;" id="pm-actions" style="display:none">
-        </div>
+        <div style="padding:0 12px 10px;display:flex;gap:8px;flex-wrap:wrap;" id="pm-actions" style="display:none"></div>
       </div>
-
-      <!-- AI Chat -->
       <div class="ai-panel">
         <div class="ai-head">
           <div class="ai-indicator"></div>
@@ -439,7 +424,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 <!-- ════ VOICE INSIGHT SCREEN ════ -->
 <div class="voice-screen" id="voice-screen">
   <div style="display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 52px);">
-    <!-- Left: recording + form -->
     <div style="border-right:1px solid var(--border);overflow-y:auto;">
       <div class="voice-hero">
         <h2>🎤 Voice Insight</h2>
@@ -479,7 +463,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
     </div>
-    <!-- Right: insight list + presentation seeds -->
     <div style="overflow-y:auto;padding:20px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <div class="sec-title"><span class="dot" style="background:var(--purple)"></span>蓄積インサイト</div>
@@ -508,7 +491,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <button class="modal-close" onclick="closeIgModal()">×</button>
     </div>
     <div class="modal-body">
-      <!-- Step 1: source selection -->
       <div id="ig-step1">
         <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">生成元を選択してください</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
@@ -549,7 +531,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
           <button class="btn btn-primary" id="ig-gen-btn" onclick="runIgGeneration()" style="margin-top:10px;">✨ インフォグラフィックを生成</button>
         </div>
       </div>
-      <!-- Step 2: preview -->
       <div id="ig-step2" style="display:none">
         <div id="ig-inline-preview"></div>
         <div style="display:flex;gap:10px;margin-top:14px;justify-content:flex-end;">
@@ -586,13 +567,6 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         <button class="btn btn-teal" onclick="copySyncJson()" style="flex:1;">📋 JSONをコピー</button>
         <button class="btn btn-ghost" onclick="closeSyncModal()">閉じる</button>
       </div>
-      <div style="margin-top:16px;background:var(--bg3);border-radius:var(--r);padding:14px;font-size:12px;color:var(--text2);line-height:1.8;">
-        <strong style="color:var(--text);">GASへの貼り付け手順（初回のみ）：</strong><br>
-        1. <a href="https://script.google.com" target="_blank" style="color:var(--blue);">script.google.com</a> を開く<br>
-        2. 「新しいプロジェクト」→ コードを貼り付けて保存<br>
-        3. <code style="background:var(--bg4);padding:1px 5px;border-radius:3px;">setupWeeklyTrigger()</code> を手動実行（トリガー登録）<br>
-        4. 以後、毎週木曜15時に自動で下書き作成 ✅
-      </div>
     </div>
   </div>
 </div>
@@ -607,32 +581,15 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
     <div class="modal-body">
       <div id="notion-status-bar" style="display:none;margin-bottom:16px;"></div>
       <div class="ffield">
-        <label>Claude APIキー（sk-ant- または ntn_ から始まる文字列）</label>
-        <input type="password" id="n-claude-key" placeholder="sk-ant-xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">console.anthropic.com → API keys で取得。ブラウザ内にのみ保存されます。</div>
-      </div>
-      <div class="ffield">
         <label>GAS WebアプリURL（デプロイで取得したURL）</label>
         <input type="text" id="n-gas-url" placeholder="https://script.google.com/macros/s/xxxxx/exec" autocomplete="off">
       </div>
       <div style="background:var(--bg3);border-radius:var(--r);padding:14px;margin-bottom:16px;">
         <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px;">データベースID（各URLの32文字）</div>
-        <div class="ffield" style="margin-bottom:8px;">
-          <label>📝 Hema Memos</label>
-          <input type="text" id="n-db-memos" placeholder="32文字のID" autocomplete="off">
-        </div>
-        <div class="ffield" style="margin-bottom:8px;">
-          <label>📊 Infographics</label>
-          <input type="text" id="n-db-infographics" placeholder="32文字のID" autocomplete="off">
-        </div>
-        <div class="ffield" style="margin-bottom:8px;">
-          <label>🎤 Voice Insights</label>
-          <input type="text" id="n-db-voice" placeholder="32文字のID" autocomplete="off">
-        </div>
-        <div class="ffield" style="margin-bottom:0;">
-          <label>📋 Weekly Reports</label>
-          <input type="text" id="n-db-weekly" placeholder="32文字のID" autocomplete="off">
-        </div>
+        <div class="ffield" style="margin-bottom:8px;"><label>📝 Hema Memos</label><input type="text" id="n-db-memos" placeholder="32文字のID" autocomplete="off"></div>
+        <div class="ffield" style="margin-bottom:8px;"><label>📊 Infographics</label><input type="text" id="n-db-infographics" placeholder="32文字のID" autocomplete="off"></div>
+        <div class="ffield" style="margin-bottom:8px;"><label>🎤 Voice Insights</label><input type="text" id="n-db-voice" placeholder="32文字のID" autocomplete="off"></div>
+        <div class="ffield" style="margin-bottom:0;"><label>📋 Weekly Reports</label><input type="text" id="n-db-weekly" placeholder="32文字のID" autocomplete="off"></div>
       </div>
       <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;">
         <button class="btn btn-ghost btn-sm" onclick="testNotionConnection()">🔌 接続テスト</button>
@@ -649,10 +606,8 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 <div class="toast" id="toast"></div>
 
 <script>
-// ══ PDF.js ══
 if(typeof pdfjsLib!=='undefined') pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// ══ AUTH ══
 const USERS={
   sakai:{pass:'hema2025',display:'酒井先生',role:'attending'},
   konuma:{pass:'hema2025',display:'小沼先生',role:'resident'},
@@ -672,7 +627,6 @@ function doLogin(){
     document.getElementById('app').style.display='block';
     document.getElementById('uname-display').textContent=CU.display;
     document.getElementById('uavatar').textContent=CU.display.slice(0,2);
-    // ② role制御: attendingのみ管理ボタン表示
     const isAdmin=CU.role==='attending';
     ['btn-sync','btn-notion','btn-export'].forEach(id=>{
       const el=document.getElementById(id);
@@ -691,7 +645,6 @@ function doLogout(){
 }
 document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-// ══ STORAGE ══
 const SK='hema-nexus-v1';
 async function save(items){
   try{await window.storage.set(SK,JSON.stringify(items));}
@@ -711,19 +664,16 @@ async function loadAll(){
   populateQSelect();
 }
 
-// ══ VIEWS ══
 let feedFilter='all';
 function switchView(v){
-  // normal views (left panel)
   ['feed','questions','post'].forEach(x=>{
     document.getElementById('view-'+x).classList.toggle('active',x===v);
   });
   document.querySelectorAll('.ntab').forEach((t,i)=>{
     t.classList.toggle('active',['feed','questions','post','voice'][i]===v);
   });
-  // voice is full-screen, hides main-layout
-  const mainLayout = document.querySelector('.main-layout');
-  const voiceScreen = document.getElementById('voice-screen');
+  const mainLayout=document.querySelector('.main-layout');
+  const voiceScreen=document.getElementById('voice-screen');
   if(v==='voice'){
     mainLayout.style.display='none';
     voiceScreen.style.display='block';
@@ -743,7 +693,6 @@ function setPostType(t){
   document.getElementById('p-body').dataset.type=t;
 }
 
-// ══ POST ══
 async function submitPost(){
   const title=document.getElementById('p-title').value.trim();
   const body=document.getElementById('p-body').value.trim();
@@ -760,7 +709,7 @@ async function submitPost(){
   };
   items.unshift(item);
   await save(items);
-  saveToNotion(item);  // Notionに自動保存
+  saveToNotion(item);
   clearPost();renderFeed();renderQuestions();updateStats();populateQSelect();
   switchView(t==='question'?'questions':'feed');
   showToast(t==='question'?'疑問を投稿しました':'メモを投稿しました');
@@ -771,7 +720,6 @@ function clearPost(){
   document.getElementById('perr').style.display='none';
 }
 
-// ══ RENDER FEED ══
 const CAT={disease:'疾患',flow:'鑑別フロー',infection:'感染症',procedure:'手技',other:'その他',question:'疑問'};
 function filterFeed(f,btn){
   feedFilter=f;
@@ -786,7 +734,6 @@ function renderFeed(){
   else if(feedFilter!=='all') data=data.filter(i=>i.cat===feedFilter&&i.type!=='question');
   document.getElementById('feed-count').textContent=data.length+' 件';
   if(!data.length){list.innerHTML='<div class="empty"><div class="icon">📋</div><p>該当するメモがありません</p></div>';return;}
-  // ③ アーカイブ: 20件超は折りたたむ
   const overLimit=data.length>ARCHIVE_MAX;
   const visible=showArchive?data:data.slice(0,ARCHIVE_MAX);
   const archiveBtn=overLimit?`<div style="text-align:center;margin:12px 0;">
@@ -817,7 +764,6 @@ function renderFeed(){
 }
 function toggleArchive(){showArchive=!showArchive;renderFeed();}
 
-// ══ RENDER QUESTIONS ══
 function renderQuestions(){
   const list=document.getElementById('q-list');
   const qs=items.filter(i=>i.type==='question'&&!i.answered);
@@ -850,7 +796,6 @@ function updateStats(){
   document.getElementById('st-ig').textContent=items.filter(i=>i.infographic).length;
 }
 
-// ══ PUBMED SEARCH ══
 let selectedPaper=null;
 async function searchPubmed(){
   const q=document.getElementById('pm-query').value.trim();
@@ -890,7 +835,6 @@ function selectPaper(p){
   selectedPaper=p;
   document.querySelectorAll('.paper-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById('pc-'+p.id)?.classList.add('selected');
-  // show generate button under pubmed panel
   let wrap=document.getElementById('pm-actions');
   wrap.style.display='flex';
   wrap.innerHTML=`<button class="btn btn-amber btn-sm" onclick="openIgModal(null)" style="width:100%">📊 この論文でインフォグラフィック生成</button>`;
@@ -905,7 +849,6 @@ function searchFromQ(qid){
   document.getElementById('pm-results').scrollIntoView({behavior:'smooth'});
 }
 
-// ══ IG MODAL ══
 let igSourceType=null;let igPdfText=null;let igLinkedQId=null;let igData=null;
 
 function openIgModal(qid){
@@ -973,8 +916,17 @@ function resetIgPdf(){
   document.getElementById('ig-pdf-info').style.display='none';
 }
 
+// ══ GAS経由Claude API呼び出し共通関数 ══
+async function callClaude(payload){
+  const res = await fetch(NOTION_DEFAULTS.gasUrl, {
+    method: 'POST',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify(payload)
+  });
+  return res;
+}
+
 async function runIgGeneration(){
-  // Determine text source
   let text='';
   if(igSourceType==='selected'&&selectedPaper){
     text=`Title: ${selectedPaper.title}\nAuthors: ${selectedPaper.authors}\nJournal: ${selectedPaper.journal} ${selectedPaper.year}\nPMID: ${selectedPaper.id}\n\n[Abstract not available via API — AI will generate based on title/metadata and general knowledge of this paper]`;
@@ -992,10 +944,7 @@ async function runIgGeneration(){
   try{
     const {system,user}=buildIgPrompt(text);
     showIgProg(30,'Claude APIに送信中...');
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:claudeHeaders(),
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:user}]})
-    });
+    const res=await callClaude({model:'claude-sonnet-4-20250514',max_tokens:2000,system,messages:[{role:'user',content:user}]});
     showIgProg(65,'結果を受信中...');
     const data=await res.json();
     const raw=data.content?.map(c=>c.text||'').join('');
@@ -1020,7 +969,6 @@ function showIgProg(pct,lbl){
   document.getElementById('ig-prog-lbl').textContent=lbl;
 }
 
-// ══ INFOGRAPHIC PROMPT ══
 function buildIgPrompt(text){
   const system=`You are a clinical paper JSON extractor. Respond with ONLY a single valid JSON object. No prose, no markdown fences. Complete and parseable. Use only standard half-width ASCII characters for punctuation inside JSON strings. No fullwidth characters like （）in JSON values.`;
   const user=`Parse the following clinical paper and return ONLY a valid JSON object. Extract all data from the paper; for values not explicitly stated, make reasonable inferences.
@@ -1099,7 +1047,6 @@ function extractJSON(raw){
   throw new Error('JSONを抽出できませんでした');
 }
 
-// ══ RENDER IG INLINE ══
 function renderIgPreview(d){
   const el=document.getElementById('ig-inline-preview');
   el.innerHTML=`
@@ -1168,7 +1115,6 @@ function renderIgRight(d){
   </div></div>`;
 }
 
-// ══ CHARTS ══
 function renderSurvivalChart(canvasId,sc,small){
   const ctx=document.getElementById(canvasId);if(!ctx)return;
   new Chart(ctx,{type:'line',data:{
@@ -1197,7 +1143,6 @@ function renderBarChart(canvasId,sg,small){
       }}});
 }
 
-// ══ SAVE IG TO BASE ══
 async function saveIgToBase(){
   if(!igData)return;
   const qid=parseInt(document.getElementById('ig-q-select').value)||null;
@@ -1215,8 +1160,8 @@ async function saveIgToBase(){
     if(qi){qi.answered=true;qi.answerId=newItem.id;}
   }
   await save(items);
-  saveToNotion(newItem);                        // Notion Memos DBに保存
-  saveInfographicToNotion(igData, newItem.title); // Notion Infographics DBに保存
+  saveToNotion(newItem);
+  saveInfographicToNotion(igData,newItem.title);
   renderFeed();renderQuestions();updateStats();populateQSelect();
   closeIgModal();selectedPaper=null;
   document.getElementById('pm-actions').style.display='none';
@@ -1234,7 +1179,6 @@ function viewIg(id){
   document.getElementById('ig-modal').classList.add('open');
 }
 
-// ══ AI CHAT ══
 let aiBusy=false;
 function buildCtx(){
   if(!items.length)return '（まだ投稿はありません）';
@@ -1253,13 +1197,10 @@ async function sendAI(){
   aiBusy=true;document.getElementById('ai-send').disabled=true;
   addTyping();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:claudeHeaders(),
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:800,
-        system:`あなたは血液内科の科内知識ベースAIです。以下の情報をもとに質問に答えてください。\n\n${buildCtx()}\n\nPubMed検索が必要な場合はクエリを提案してください。回答は日本語・300字以内で箇条書きを使いわかりやすく。`,
-        messages:[{role:'user',content:q}]
-      })
+    const res=await callClaude({
+      model:'claude-sonnet-4-20250514',max_tokens:800,
+      system:`あなたは血液内科の科内知識ベースAIです。以下の情報をもとに質問に答えてください。\n\n${buildCtx()}\n\nPubMed検索が必要な場合はクエリを提案してください。回答は日本語・300字以内で箇条書きを使いわかりやすく。`,
+      messages:[{role:'user',content:q}]
     });
     const data=await res.json();
     removeTyping();
@@ -1285,11 +1226,9 @@ function addTyping(){
 function removeTyping(){document.getElementById('tdot')?.remove();}
 function autoR(el){el.style.height='';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 
-// ══ UTILS ══
 function e(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
-// ══ VOICE INSIGHT ══
 let recognition=null;let isRecording=false;let viFilter='all';
 
 function initSpeech(){
@@ -1326,7 +1265,6 @@ function toggleRecording(){
   if(isRecording) stopRecording();
   else startRecording();
 }
-
 function startRecording(){
   if(!recognition) recognition=initSpeech();
   if(!recognition) return;
@@ -1336,23 +1274,19 @@ function startRecording(){
   document.getElementById('mic-btn').textContent='⏹️';
   document.getElementById('mic-status').textContent='録音中… タップで停止';
 }
-
 function stopRecording(){
   if(recognition) recognition.stop();
   isRecording=false;
   document.getElementById('mic-btn').classList.remove('recording');
   document.getElementById('mic-btn').textContent='🎙️';
   document.getElementById('mic-status').textContent='タップして録音開始';
-  // sync transcript to textarea
   const tr=document.getElementById('voice-transcript').textContent;
   if(tr&&!document.getElementById('vi-body').value) document.getElementById('vi-body').value=tr;
 }
-
 function selectItag(btn){
   document.querySelectorAll('.itag').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
-
 function populateViLinkQ(){
   const sel=document.getElementById('vi-link-q');
   const qs=items.filter(i=>i.type==='question');
@@ -1373,10 +1307,7 @@ async function saveInsight(){
 
 メモ:
 ${body.substring(0,1000)}`;
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:claudeHeaders(),
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:sys,messages:[{role:'user',content:usr}]})
-    });
+    const res=await callClaude({model:'claude-sonnet-4-20250514',max_tokens:400,system:sys,messages:[{role:'user',content:usr}]});
     setViProg(70,'処理中...');
     const data=await res.json();
     const raw=data.content?.map(c=>c.text||'').join('');
@@ -1393,7 +1324,7 @@ ${body.substring(0,1000)}`;
   };
   items.unshift(insight);
   await save(items);
-  saveToNotion(insight);  // Notion Voice Insights DBに保存
+  saveToNotion(insight);
   setViProg(100,'保存完了！');
   await new Promise(r=>setTimeout(r,500));
   document.getElementById('vi-prog').style.display='none';
@@ -1408,7 +1339,6 @@ function setViProg(pct,lbl){
   document.getElementById('vi-prog-fill').style.width=pct+'%';
   document.getElementById('vi-prog-lbl').textContent=lbl;
 }
-
 function clearVoice(){
   document.getElementById('vi-title').value='';
   document.getElementById('vi-body').value='';
@@ -1418,14 +1348,12 @@ function clearVoice(){
   document.getElementById('vi-prog').style.display='none';
   if(isRecording) stopRecording();
 }
-
 function filterInsights(f,btn){
   viFilter=f;
   document.querySelectorAll('#voice-screen .fchip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   renderInsights();
 }
-
 function renderInsights(){
   const list=document.getElementById('insight-list');
   let data=items.filter(i=>i.type==='insight');
@@ -1463,16 +1391,13 @@ async function generatePresentationSeeds(){
   seedsDiv.style.display='block';
   const ctx=ideas.slice(0,20).map((ins,i)=>`[${i+1}] ${ins.title}: ${ins.body.slice(0,150)} / 発表角度: ${ins.presentationAngle||'未設定'}`).join('\n');
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:claudeHeaders(),
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:800,
-        system:'血液内科の学術支援AIです。蓄積されたインサイトから学会発表候補テーマを3つ提案してください。JSONのみ返してください。',
-        messages:[{role:'user',content:`以下のインサイトを分析し、学会発表候補を3つ提案してください。
+    const res=await callClaude({
+      model:'claude-sonnet-4-20250514',max_tokens:800,
+      system:'血液内科の学術支援AIです。蓄積されたインサイトから学会発表候補テーマを3つ提案してください。JSONのみ返してください。',
+      messages:[{role:'user',content:`以下のインサイトを分析し、学会発表候補を3つ提案してください。
 [{"title":"テーマタイトル","rationale":"なぜ発表価値があるか（2文）","design":"推奨される研究デザイン（1文）","conference":"適切な学会名（例: ASH, JSH）"}]
 
 インサイト:\n${ctx}`}]
-      })
     });
     const data=await res.json();
     const raw=data.content?.map(c=>c.text||'').join('');
@@ -1489,20 +1414,16 @@ async function generatePresentationSeeds(){
   }
 }
 
-// ══ WEEKLY EXPORT (for Google Apps Script) ══
 function exportForGAS(){
-  const data = JSON.stringify(items, null, 2);
-  const blob = new Blob([data], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'hema-nexus-export.json';
-  a.click();
+  const data=JSON.stringify(items,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='hema-nexus-export.json';a.click();
   URL.revokeObjectURL(url);
   showToast('エクスポート完了。Google Drive の「マイドライブ」にアップロードしてください。');
 }
 
-// ══ GAS SYNC MODAL ══
 function showSyncModal(){
   const json=JSON.stringify(items,null,2);
   document.getElementById('sync-json').value=json;
@@ -1519,21 +1440,11 @@ function copySyncJson(){
 }
 
 // ══ NOTION INTEGRATION ══
-// ══ CLAUDE API KEY ══
 const CLAUDE_SK = 'hema-claude-apikey';
 function getClaudeKey(){ return localStorage.getItem(CLAUDE_SK)||''; }
-function claudeHeaders(){
-  return {
-    'Content-Type':'application/json',
-    'x-api-key': getClaudeKey(),
-    'anthropic-version':'2023-06-01',
-    'anthropic-dangerous-direct-browser-access':'true',
-  };
-}
 
 const NOTION_SK = 'hema-notion-config';
 
-// デフォルト設定（埋め込み済み）
 const NOTION_DEFAULTS = {
   gasUrl: 'https://script.google.com/macros/s/AKfycbx9g3gBjLrpeVwd-bkpwtNi1BOiDy_y8shUZh8HoISKuan8rDSL7aBTEiNuXWvI54tF/exec',
   dbMemos:        '32c315decd488003b615f30f9efa6a60',
@@ -1544,32 +1455,26 @@ const NOTION_DEFAULTS = {
 
 function getNotionConfig(){
   try{
-    const stored = JSON.parse(localStorage.getItem(NOTION_SK)||'{}');
-    return {...NOTION_DEFAULTS, ...stored};
+    const stored=JSON.parse(localStorage.getItem(NOTION_SK)||'{}');
+    return {...NOTION_DEFAULTS,...stored};
   }catch{ return {...NOTION_DEFAULTS}; }
 }
 function saveNotionSettings(){
-  const claudeKey=document.getElementById('n-claude-key').value.trim();
-  if(claudeKey) localStorage.setItem(CLAUDE_SK, claudeKey);
   const cfg={
-    gasUrl: document.getElementById('n-gas-url').value.trim(),
-    dbMemos: document.getElementById('n-db-memos').value.trim().replace(/-/g,''),
-    dbInfographics: document.getElementById('n-db-infographics').value.trim().replace(/-/g,''),
-    dbVoice: document.getElementById('n-db-voice').value.trim().replace(/-/g,''),
-    dbWeekly: document.getElementById('n-db-weekly').value.trim().replace(/-/g,''),
+    gasUrl:document.getElementById('n-gas-url').value.trim(),
+    dbMemos:document.getElementById('n-db-memos').value.trim().replace(/-/g,''),
+    dbInfographics:document.getElementById('n-db-infographics').value.trim().replace(/-/g,''),
+    dbVoice:document.getElementById('n-db-voice').value.trim().replace(/-/g,''),
+    dbWeekly:document.getElementById('n-db-weekly').value.trim().replace(/-/g,''),
   };
-  if(!cfg.gasUrl||!cfg.dbMemos){
-    showToast('GAS URLとHema MemosのIDは必須です');return;
-  }
-  localStorage.setItem(NOTION_SK, JSON.stringify(cfg));
+  if(!cfg.gasUrl||!cfg.dbMemos){showToast('GAS URLとHema MemosのIDは必須です');return;}
+  localStorage.setItem(NOTION_SK,JSON.stringify(cfg));
   closeNotionSettings();
   showToast('設定を保存しました');
   updateNotionStatusBar();
 }
 function openNotionSettings(){
   const cfg=getNotionConfig();
-  const claudeKey=getClaudeKey();
-  if(claudeKey) document.getElementById('n-claude-key').value=claudeKey;
   if(cfg.gasUrl) document.getElementById('n-gas-url').value=cfg.gasUrl;
   if(cfg.dbMemos) document.getElementById('n-db-memos').value=cfg.dbMemos;
   if(cfg.dbInfographics) document.getElementById('n-db-infographics').value=cfg.dbInfographics;
@@ -1578,47 +1483,7 @@ function openNotionSettings(){
   document.getElementById('notion-test-result').style.display='none';
   document.getElementById('notion-modal').classList.add('open');
 }
-function closeNotionSettings(){
-  document.getElementById('notion-modal').classList.remove('open');
-}
-
-async function notionAPI(endpoint, method, body, token){
-  const cfg=token?{token}:getNotionConfig();
-  const res=await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:500,
-      system:'You are a Notion API proxy. Call the Notion API on behalf of the user and return the raw JSON response. Return ONLY the JSON result, no explanation.',
-      messages:[{role:'user',content:`Call Notion API:
-Endpoint: https://api.notion.com/v1/${endpoint}
-Method: ${method}
-Token: ${cfg.token}
-Body: ${body?JSON.stringify(body):'none'}
-Return the raw API response JSON only.`}]
-    })
-  });
-  const d=await res.json();
-  const raw=d.content?.map(c=>c.text||'').join('');
-  try{ return JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch{ return {error:raw}; }
-}
-
-// Direct Notion API call via GAS proxy (CORS回避)
-async function callNotion(endpoint, method='GET', body=null){
-  const cfg=getNotionConfig();
-  if(!cfg.gasUrl) throw new Error('GAS URLが設定されていません');
-  const action = endpoint==='users/me' ? 'ping' : 'createPage';
-  const payload={ action, ...( body||{} ) };
-  const res=await fetch(cfg.gasUrl,{
-    method:'POST',
-    headers:{'Content-Type':'text/plain'},
-    body:JSON.stringify(payload),
-  });
-  const data=await res.json();
-  if(!data.ok) throw new Error(data.error||'GAS proxy error');
-  return data.result;
-}
+function closeNotionSettings(){document.getElementById('notion-modal').classList.remove('open');}
 
 async function testNotionConnection(){
   const resultEl=document.getElementById('notion-test-result');
@@ -1631,7 +1496,7 @@ async function testNotionConnection(){
     const res=await fetch(gasUrl,{method:'GET'});
     const data=await res.json();
     if(data.ok){
-      resultEl.textContent='✅ 接続成功！Notion APIに正常に接続できました。（'+( data.result?.name||'OK')+'）';
+      resultEl.textContent='✅ 接続成功！（'+(data.result?.name||'OK')+'）';
       resultEl.style.color='var(--teal)';
     } else {
       resultEl.textContent='❌ エラー: '+(data.error||JSON.stringify(data));
@@ -1653,15 +1518,11 @@ function updateNotionStatusBar(){
   }
 }
 
-// ── Notionに投稿を保存 ──
 async function saveToNotion(item){
   const cfg=getNotionConfig();
-  console.log('[Notion] cfg.gasUrl:', cfg.gasUrl?.slice(0,40));
-  console.log('[Notion] cfg.dbVoice:', cfg.dbVoice);
-  console.log('[Notion] item.type:', item.type);
-  if(!cfg.gasUrl||!cfg.dbMemos) { console.warn('[Notion] 設定なし'); return; }
+  if(!cfg.gasUrl||!cfg.dbMemos){return;}
   const dbId=item.type==='insight'?(cfg.dbVoice||cfg.dbMemos):cfg.dbMemos;
-  if(!dbId) return;
+  if(!dbId)return;
   try{
     const typeLabel=item.type==='question'?'【疑問】':item.type==='insight'?'【インサイト】':'【メモ】';
     const res=await fetch(cfg.gasUrl,{
@@ -1670,14 +1531,10 @@ async function saveToNotion(item){
       body:JSON.stringify({
         action:'createPage',
         databaseId:dbId,
-        properties:{
-          '名前':{title:[{text:{content:typeLabel+(item.title||'無題')}}]},
-        },
-        children:[
-          {object:'block',type:'paragraph',paragraph:{rich_text:[
-            {type:'text',text:{content:'投稿者: '+(item.author||'')+'　日時: '+(item.date?new Date(item.date).toLocaleString('ja-JP'):'')+'\nカテゴリ: '+(item.cat||item.tag||'')+'\n\n'+(item.body||'').slice(0,1900)}}
-          ]}},
-        ]
+        properties:{'名前':{title:[{text:{content:typeLabel+(item.title||'無題')}}]}},
+        children:[{object:'block',type:'paragraph',paragraph:{rich_text:[
+          {type:'text',text:{content:'投稿者: '+(item.author||'')+'　日時: '+(item.date?new Date(item.date).toLocaleString('ja-JP'):'')+'\nカテゴリ: '+(item.cat||item.tag||'')+'\n\n'+(item.body||'').slice(0,1900)}}
+        ]}}],
       }),
     });
     const data=await res.json();
@@ -1686,9 +1543,9 @@ async function saveToNotion(item){
   }catch(err){ console.error('Notion保存エラー:',err); }
 }
 
-async function saveInfographicToNotion(igData, title){
+async function saveInfographicToNotion(igData,title){
   const cfg=getNotionConfig();
-  if(!cfg.gasUrl||!cfg.dbInfographics) return;
+  if(!cfg.gasUrl||!cfg.dbInfographics)return;
   try{
     const res=await fetch(cfg.gasUrl,{
       method:'POST',
@@ -1696,9 +1553,7 @@ async function saveInfographicToNotion(igData, title){
       body:JSON.stringify({
         action:'createPage',
         databaseId:cfg.dbInfographics,
-        properties:{
-          '名前':{title:[{text:{content:'【論文】'+(igData.title_jp||title||'インフォグラフィック')}}]},
-        },
+        properties:{'名前':{title:[{text:{content:'【論文】'+(igData.title_jp||title||'インフォグラフィック')}}]}},
         children:[
           {object:'block',type:'paragraph',paragraph:{rich_text:[{type:'text',text:{content:(igData.subtitle_en||'').slice(0,500)}}]}},
           {object:'block',type:'heading_2',heading_2:{rich_text:[{type:'text',text:{content:'Discussion'}}]}},
